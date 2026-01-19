@@ -9,6 +9,7 @@ import { DataSource } from 'typeorm';
 import { AuthController } from './controllers/auth/auth.controller';
 import { BlobsController } from './controllers/blobs/blobs.controller';
 import { ConversationsController } from './controllers/conversations/conversations.controller';
+import { EvalControllerModule } from './controllers/eval';
 import { ConfigurationsController } from './controllers/extensions/configurations.controller';
 import { ExtensionsController } from './controllers/extensions/extensions.controller';
 import { FilesController } from './controllers/files/files.controller';
@@ -38,6 +39,7 @@ import { PrometheusModule } from './metrics/prometheus.module';
     ChatModule,
     ConfigModule.forRoot(),
     CqrsModule,
+    EvalControllerModule,
     ExtensionLibraryModule.register(),
     ExtensionModule,
     FilesModule,
