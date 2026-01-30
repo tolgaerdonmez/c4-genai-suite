@@ -8,9 +8,9 @@ import { Role } from 'src/domain/auth/role.decorator';
 import { BUILTIN_USER_GROUP_ADMIN } from 'src/domain/database';
 
 /**
- * Dynamic proxy controller for eval service.
+ * Authenticated controller for eval service requests.
  *
- * This controller acts as an authenticated proxy to the internal eval service.
+ * This controller forwards requests to the internal eval service with authentication.
  * All routes are protected with LocalAuthGuard (session auth) and RoleGuard (admin only).
  *
  * Guards execute BEFORE the controller method, ensuring req.user is populated.
@@ -20,7 +20,7 @@ import { BUILTIN_USER_GROUP_ADMIN } from 'src/domain/database';
 @UseGuards(LocalAuthGuard, RoleGuard)
 @Role(BUILTIN_USER_GROUP_ADMIN)
 @ApiTags('eval')
-export class EvalProxyController {
+export class EvalController {
   constructor(private readonly configService: ConfigService) {}
 
   /**
@@ -48,17 +48,6 @@ export class EvalProxyController {
       Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query as Record<string, string>).toString() : '';
 
     const targetUrl = `${evalServiceUrl}${targetPath}${queryString}`;
-
-    // Log request (similar to previous middleware logging)
-    console.log('=== Eval Proxy: Incoming Request ===');
-    console.log(`Method: ${req.method}`);
-    console.log(`Path: ${req.path}`);
-    console.log(`Target: ${targetUrl}`);
-    console.log(`User: ${req.user.name} (${req.user.id})`);
-    if (req.body) {
-      console.log(`Body:`, JSON.stringify(req.body, null, 2));
-    }
-    console.log('===================================');
 
     try {
       // Prepare headers
@@ -99,22 +88,6 @@ export class EvalProxyController {
       const buffer = await response.arrayBuffer();
       const responseBody = Buffer.from(buffer);
 
-      // Log response
-      console.log('=== Eval Proxy: Response ===');
-      console.log(`Status: ${response.status} ${response.statusText}`);
-
-      // Log response body for debugging (especially for errors)
-      if (response.status >= 400) {
-        try {
-          const bodyText = responseBody.toString('utf-8');
-          console.log(`Error Response Body:`, bodyText);
-        } catch (e) {
-          console.log(`Could not parse error response body`);
-          console.log(e);
-        }
-      }
-      console.log('============================');
-
       // Forward response headers
       response.headers.forEach((value, key) => {
         res.setHeader(key, value);
@@ -124,9 +97,7 @@ export class EvalProxyController {
       res.status(response.status);
       res.send(responseBody);
     } catch (error) {
-      console.error('=== Eval Proxy: ERROR ===');
-      console.error(`Error:`, error instanceof Error ? error.message : String(error));
-      console.error('=========================');
+      console.error('Eval proxy error:', error instanceof Error ? error.message : String(error));
 
       if (!res.headersSent) {
         res.status(502).json({
