@@ -112,6 +112,13 @@ function load() {
       configurableArguments: translate('common.configurableArguments'),
       rowsSelected: (rowCount: number) => translate('common.rowsSelected', { rowCount }),
     },
+    evals: {
+      headline: translate('evals.headline'),
+      evaluations: translate('evals.evaluations'),
+      qaCatalogs: translate('evals.qaCatalogs'),
+      metrics: translate('evals.metrics'),
+      llmEndpoints: translate('evals.llmEndpoints'),
+    },
     chat: {
       reasoning: translate('chat.reasoning'),
       conversationNotFound: translate('chat.conversationNotFound'),

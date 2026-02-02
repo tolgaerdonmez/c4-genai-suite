@@ -82,6 +82,13 @@ export const en = {
     configurableArguments: 'Configurable',
     rowsSelected: '{{rowCount}} Row(s) Selected',
   },
+  evals: {
+    headline: 'Evals',
+    evaluations: 'Evaluations',
+    qaCatalogs: 'QA Catalogs',
+    metrics: 'Metrics',
+    llmEndpoints: 'LLM Endpoints',
+  },
   chat: {
     noAccessToConversation: "You don't have access to this conversation. You will be redirected shortly.",
     conversationNotFound: 'Conversation not found. You will be redirected shortly.',
