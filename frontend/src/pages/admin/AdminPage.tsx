@@ -62,10 +62,7 @@ export function AdminPage() {
                   </TransientNavLink>
                 </li>
                 <li>
-                  <button
-                    className="block w-full text-left"
-                    onClick={() => setIsEvalsOpen(!isEvalsOpen)}
-                  >
+                  <button className="block w-full text-left" onClick={() => setIsEvalsOpen(!isEvalsOpen)}>
                     <span className="flex items-center justify-between">
                       {texts.evals.headline}
                       <svg
@@ -79,7 +76,7 @@ export function AdminPage() {
                     </span>
                   </button>
                   {isEvalsOpen && (
-                    <ul className="ml-4 mt-1 space-y-1">
+                    <ul className="mt-1 ml-4 space-y-1">
                       <li>
                         <TransientNavLink className="block" to="/admin/evals/evaluations">
                           {texts.evals.evaluations}
