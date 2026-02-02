@@ -9,6 +9,7 @@ import { DashboardPage } from './dashboard/DashboardPage';
 import { EvaluationsPage } from './evals/evaluations/EvaluationsPage';
 import { LlmEndpointsPage } from './evals/llm-endpoints/LlmEndpointsPage';
 import { MetricsPage } from './evals/metrics/MetricsPage';
+import { QaCatalogDetailPage } from './evals/qa-catalogs/QaCatalogDetailPage';
 import { QaCatalogsPage } from './evals/qa-catalogs/QaCatalogsPage';
 import { ConfigurationPage } from './extensions/ConfigurationPage.tsx';
 import { BucketsPage } from './files/BucketsPage';
@@ -127,6 +128,8 @@ export function AdminPage() {
             <Route path="/evals/evaluations" element={<EvaluationsPage />} />
 
             <Route path="/evals/qa-catalogs" element={<QaCatalogsPage />} />
+
+            <Route path="/evals/qa-catalogs/:catalogId" element={<QaCatalogDetailPage />} />
 
             <Route path="/evals/metrics" element={<MetricsPage />} />
 
