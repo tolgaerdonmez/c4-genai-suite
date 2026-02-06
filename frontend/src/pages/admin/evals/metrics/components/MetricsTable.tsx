@@ -11,7 +11,7 @@ interface MetricsTableProps {
   onRowClick: (metric: Metric) => void;
   onEdit: (metric: Metric) => void;
   onDelete: (metric: Metric) => void;
-  isDeleting?: boolean;
+  isDeleting?: string; // ID of the metric being deleted
 }
 
 export function MetricsTable({
@@ -90,7 +90,8 @@ export function MetricsTable({
                       e.stopPropagation();
                       onEdit(metric);
                     }}
-                    disabled={isDeleting}
+                    disabled={isDeleting === metric.id}
+                    aria-label={texts.common.edit}
                   >
                     <IconPencil size={18} />
                   </button>
@@ -101,7 +102,8 @@ export function MetricsTable({
                       e.stopPropagation();
                       onDelete(metric);
                     }}
-                    disabled={isDeleting}
+                    disabled={isDeleting === metric.id}
+                    aria-label={texts.common.remove}
                   >
                     <IconTrash size={18} />
                   </button>
