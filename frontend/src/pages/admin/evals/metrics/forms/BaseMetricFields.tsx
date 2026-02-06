@@ -1,7 +1,6 @@
-import { Autocomplete, Slider, Switch, TextInput } from '@mantine/core';
+import { Slider, Switch, TextInput } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
-import { useMemo } from 'react';
-import { useLlmEndpoints } from 'src/pages/admin/evals/llm-endpoints/hooks/useLlmEndpointQueries';
+import { LlmEndpointSelect } from 'src/pages/admin/evals/components/LlmEndpointSelect';
 import { texts } from 'src/texts';
 
 interface BaseMetricFieldsProps {
@@ -9,17 +8,6 @@ interface BaseMetricFieldsProps {
 }
 
 export function BaseMetricFields({ form }: BaseMetricFieldsProps) {
-  // Fetch LLM endpoints with CHAT feature for chat model selection
-  const { data: endpointsData, isLoading: isLoadingEndpoints } = useLlmEndpoints(0, undefined, ['CHAT']);
-
-  // Extract endpoint options for autocomplete
-  const chatModelOptions = useMemo(() => {
-    if (!endpointsData) return [];
-    return endpointsData.map((endpoint) => ({
-      value: endpoint.id,
-      label: endpoint.name,
-    }));
-  }, [endpointsData]);
 
   // Threshold marks for the slider
   const thresholdMarks = [
@@ -59,13 +47,12 @@ export function BaseMetricFields({ form }: BaseMetricFieldsProps) {
         />
       </div>
 
-      <Autocomplete
+      <LlmEndpointSelect
         withAsterisk
         label={texts.evals.metric.chatModelLabel}
         placeholder={texts.evals.metric.chatModelPlaceholder}
         description={texts.evals.metric.chatModelHint}
-        data={chatModelOptions}
-        disabled={isLoadingEndpoints}
+        supportedFeatures={['CHAT_MODEL']}
         className="mb-4"
         key={form.key('chatModelId')}
         {...form.getInputProps('chatModelId')}
