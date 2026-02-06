@@ -83,32 +83,30 @@ export function CreateMetricDialog({ onClose, onCreated }: CreateMetricDialogPro
 
   const handleSubmit = form.onSubmit((values) => {
     // Transform form values to API format
+    // NOTE: API expects ALL fields to be present, even if not used for the metric type
     const { type } = values;
 
-    // Build configuration based on type to ensure only relevant fields are sent
     let configuration: any = {
       type,
       name: values.name,
       threshold: values.threshold,
       chatModelId: values.chatModelId,
       strictMode: values.strictMode,
+      // Provide defaults for all fields
+      evaluationSteps: [],
+      evaluationParams: [],
+      includeReason: false,
     };
 
-    // Add type-specific fields
+    // Override with type-specific values
     if (type === 'G_EVAL') {
       const gEvalValues = values as Extract<CreateFormValues, { type: 'G_EVAL' }>;
-      configuration = {
-        ...configuration,
-        evaluationSteps: gEvalValues.evaluationSteps,
-        evaluationParams: gEvalValues.evaluationParams as LLMTestCaseParams[],
-      };
+      configuration.evaluationSteps = gEvalValues.evaluationSteps;
+      configuration.evaluationParams = gEvalValues.evaluationParams as LLMTestCaseParams[];
     } else {
       // Simple metrics (ANSWER_RELEVANCY, FAITHFULNESS, HALLUCINATION)
       const simpleValues = values as Extract<CreateFormValues, { type: 'ANSWER_RELEVANCY' | 'FAITHFULNESS' | 'HALLUCINATION' }>;
-      configuration = {
-        ...configuration,
-        includeReason: simpleValues.includeReason,
-      };
+      configuration.includeReason = simpleValues.includeReason;
     }
 
     const payload: MetricCreate = {

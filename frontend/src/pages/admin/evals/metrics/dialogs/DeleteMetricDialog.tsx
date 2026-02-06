@@ -47,7 +47,7 @@ export function DeleteMetricDialog({ metric, onClose, onDeleted }: DeleteMetricD
         }
       >
         <p className="text-gray-700">
-          {texts.evals.metric.deleteConfirmText.replace('{{name}}', metric._configuration.name)}
+          {texts.evals.metric.deleteConfirmText(metric._configuration.name)}
         </p>
       </Modal>
     </Portal>
