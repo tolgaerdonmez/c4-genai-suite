@@ -128,6 +128,11 @@ This document tracks the complete migration of llmeval features into c4-genai-su
 - ⏳ EndpointTestDialog (test connection)
 - ⏳ EndpointUsageStats
 
+### 3.5 C4 Assistants into LLM Endpoints (Pending)
+
+C4 Assistants should be directly be selectable as LLM endpoints, and should be selected for evaluation.
+A Connection should be designed in the eval service and c4 backend to enable accessing to assistants in c4.
+
 ---
 
 ## 4. Metrics Management
