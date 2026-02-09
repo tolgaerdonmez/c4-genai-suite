@@ -40,41 +40,41 @@ import {
  */
 export interface Dto {
     /**
-     * 
+     *
      * @type {string}
      * @memberof Dto
      */
     name: string;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Dto
      */
-    catalogId: string;
+    catalogId?: string;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Dto
      */
     llmEndpointId: string;
     /**
-     * 
+     *
      * @type {Array<string>}
      * @memberof Dto
      */
     metrics: Array<string>;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Dto
      */
     testCasesPerQaPair?: number;
     /**
-     * 
+     *
      * @type {Array<RunEvaluationByTestCasesTestCase>}
      * @memberof Dto
      */
-    testCases: Array<RunEvaluationByTestCasesTestCase>;
+    testCases?: Array<RunEvaluationByTestCasesTestCase>;
 }
 
 /**
@@ -82,10 +82,9 @@ export interface Dto {
  */
 export function instanceOfDto(value: object): value is Dto {
     if (!('name' in value) || value['name'] === undefined) return false;
-    if (!('catalogId' in value) || value['catalogId'] === undefined) return false;
     if (!('llmEndpointId' in value) || value['llmEndpointId'] === undefined) return false;
     if (!('metrics' in value) || value['metrics'] === undefined) return false;
-    if (!('testCases' in value) || value['testCases'] === undefined) return false;
+    // catalogId and testCases are optional (mutually exclusive)
     return true;
 }
 
@@ -98,13 +97,13 @@ export function DtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Dto {
         return json;
     }
     return {
-        
+
         'name': json['name'],
         'catalogId': json['catalogId'],
         'llmEndpointId': json['llmEndpointId'],
         'metrics': json['metrics'],
         'testCasesPerQaPair': json['testCasesPerQaPair'] == null ? undefined : json['testCasesPerQaPair'],
-        'testCases': ((json['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseFromJSON)),
+        'testCases': json['testCases'] == null ? undefined : (json['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseFromJSON),
     };
 }
 
@@ -112,14 +111,30 @@ export function DtoToJSON(value?: Dto | null): any {
     if (value == null) {
         return value;
     }
-    return {
-        
+
+    // Backend expects camelCase field names (Pydantic alias_generator=to_camel)
+    const result: any = {
         'name': value['name'],
-        'catalogId': value['catalogId'],
         'llmEndpointId': value['llmEndpointId'],
         'metrics': value['metrics'],
-        'testCasesPerQaPair': value['testCasesPerQaPair'],
-        'testCases': ((value['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseToJSON)),
     };
+
+    // Add description if present
+    if ((value as any)['description']) {
+        result['description'] = (value as any)['description'];
+    }
+
+    // Catalog mode - send catalogId and testCasesPerQaPair
+    if (value['catalogId']) {
+        result['catalogId'] = value['catalogId'];
+        result['testCasesPerQaPair'] = value['testCasesPerQaPair'] || 1;
+    }
+
+    // Manual mode - send testCases
+    if (value['testCases'] && value['testCases'].length > 0) {
+        result['testCases'] = (value['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseToJSON);
+    }
+
+    return result;
 }
 
