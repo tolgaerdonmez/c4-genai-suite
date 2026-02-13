@@ -193,7 +193,7 @@ A Connection should be designed in the eval service and c4 backend to enable acc
 
 ### 5.1 Evaluations List Page ✅
 
-- ✅ **DONE**: Full implementation complete (Phase 1)
+- ✅ **DONE**: Full implementation complete
 - ✅ List all evaluations
 - ✅ Display evaluation status (pending, running, completed, failed)
 - ✅ Show QA catalog, metrics, LLM endpoint
@@ -201,43 +201,54 @@ A Connection should be designed in the eval service and c4 backend to enable acc
 - ✅ Create new evaluation button
 - ✅ Search and filter evaluations
 - ✅ Navigate to evaluation details
-- ⏳ Navigate to evaluation results (Phase 3)
-- ⏳ Delete evaluation (Phase 2)
+- ✅ Navigate to evaluation results (integrated in detail page)
+- ✅ Delete evaluation (via actions menu)
 - ✅ Pagination
 
 ### 5.2 Create Evaluation Page ✅
 
+- ✅ **DONE**: Full implementation complete
 - ✅ New evaluation page (`/admin/evals/evaluations/new`)
-- ✅ Multi-step form or wizard
-  - ✅ Step 1: Select evaluation type (by catalog or manual test cases)
-  - ✅ Step 2: Select QA catalog or enter test cases
-  - ✅ Step 3: Select metrics (multiple)
-  - ✅ Step 4: Select LLM endpoint
+- ✅ Multi-step wizard (5 steps with Stepper component)
+  - ✅ Step 1: Select mode (by catalog or manual test cases)
+  - ✅ Step 2: Source (catalog selection with pagination or manual test cases)
+  - ✅ Step 3: Select metrics (multiple selection with search)
+  - ✅ Step 4: Select LLM endpoint (with search)
   - ✅ Step 5: Review and submit
 - ✅ Support for manual test cases
-- ✅ Test case builder (question, expected output, contexts)
-- ✅ Form validation
+- ✅ Test case builder (question, expected output, contexts array)
+- ✅ Wizard state management (Zustand)
+- ✅ Form validation with canProceed checks
 - ✅ Submit evaluation
 - ✅ Navigate to evaluation details after creation
+- ✅ Cancel confirmation dialog
+- ✅ Tests for CreateEvaluationPage
 
 ### 5.3 Evaluation Detail Page ✅
 
-- ✅ View evaluation details (`/admin/evals/evaluations/:id`) (Phase 2)
-- ✅ Show evaluation metadata (Phase 2)
+- ✅ **DONE**: Full implementation complete
+- ✅ View evaluation details (`/admin/evals/evaluations/:id`)
+- ✅ Tabs for Overview and Results
+- ✅ Show evaluation metadata in Overview tab
   - ✅ Name, description
-  - ✅ QA catalog used
+  - ✅ QA catalog used (with link to catalog)
   - ✅ Metrics configured
-  - ✅ Status and progress
+  - ✅ Status chip and progress
+  - ✅ Test case statistics (total, completed, passed, failed)
+  - ✅ Pie chart visualization for test case pass/fail
 - ✅ Display test case count
 - ✅ Show creation and update times
-- ✅ Actions menu (Phase 2)
+- ✅ Actions menu (EvaluationActionsMenu)
   - ⏳ Run evaluation (future enhancement)
-  - ✅ Edit evaluation name
-  - ✅ Delete evaluation
-  - ⏳ Clone evaluation (Phase 5)
-  - ⏳ Compare with others (Phase 5)
-- ✅ Real-time polling for running evaluations (Phase 2)
-- ⏳ List of evaluation results (Phase 3)
+  - ✅ Edit evaluation name (EditEvaluationNameDialog)
+  - ✅ Delete evaluation (DeleteEvaluationDialog)
+  - ✅ Export results (CSV)
+  - ⏳ Clone evaluation (future enhancement)
+  - ⏳ Compare with others (future enhancement)
+- ✅ Real-time polling for running evaluations (5s interval)
+- ✅ Status banners for RUNNING and FAILURE states
+- ✅ Metric results with donut charts (MetricResultsSection)
+- ✅ Results tab with test case results table
 
 ### 5.4 Edit Evaluation Page ⏳
 
@@ -251,23 +262,25 @@ A Connection should be designed in the eval service and c4 backend to enable acc
 
 ### 5.5 Evaluation Result Detail Page ✅
 
-- ✅ View evaluation results (integrated into detail page as tab) (Phase 3)
-- ✅ Summary section (Phase 3)
-  - ✅ Overall metrics scores
+- ✅ **DONE**: Full implementation complete (integrated into detail page Results tab)
+- ✅ View evaluation results (integrated into detail page as Results tab)
+- ✅ Summary section (integrated in Overview tab)
+  - ✅ Overall metrics scores with donut charts
   - ✅ Pass/fail indicators
   - ✅ Completion rate
   - ✅ Status
-- ✅ Test cases results table (Phase 3)
+- ✅ Test cases results table (TestCaseResultsTable component)
   - ✅ Question
-  - ✅ Expected output
+  - ✅ Expected output (shown in expandable row)
   - ✅ Metric scores per test case
-  - ✅ Pass/fail status
-  - ✅ Expandable rows for full details
-- ✅ Pagination for test case results (Phase 3)
+  - ✅ Pass/fail status chips
+  - ✅ Expandable rows for full details (contexts, actual output)
+  - ✅ Score display with color coding and threshold indicators
+- ✅ Pagination for test case results (20 per page)
 - ⏳ Filter by pass/fail (future enhancement)
-- ✅ Export results (Phase 2)
-- ✅ Expand test case for details (Phase 3)
-- ✅ Real-time updates for running evaluations (Phase 2)
+- ✅ Export results (CSV via actions menu)
+- ✅ Expand test case for details
+- ✅ Real-time updates for running evaluations (5s polling)
 
 **TODO - Backend API Enhancement:**
 - ⏳ Add `actualOutput` field to grouped evaluation results API (`GET /evaluation-results/grouped`)

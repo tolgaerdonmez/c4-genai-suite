@@ -7,7 +7,6 @@ import { texts } from 'src/texts';
 import { useEvaluationSummary } from './hooks/useEvaluationQueries';
 import { useGroupedResults } from './hooks/useEvaluationResultsQueries';
 import { useExportEvaluationResults } from './hooks/useEvaluationMutations';
-import { useEvaluationsStore } from './state';
 import { EvaluationCard } from './components/EvaluationCard';
 import { EvaluationStatusChip } from './components/EvaluationStatusChip';
 import { ResultsSummary } from './components/ResultsSummary';
@@ -24,7 +23,6 @@ export function EvaluationDetailPage() {
   const [activeTab, setActiveTab] = useState<string | null>('overview');
   const [resultsPage, setResultsPage] = useState(1);
 
-  const { setSelectedEvaluation } = useEvaluationsStore();
   const exportMutation = useExportEvaluationResults();
 
   // Fetch evaluation summary
@@ -57,13 +55,6 @@ export function EvaluationDetailPage() {
 
     return () => clearInterval(interval);
   }, [evaluation, refetch, refetchResults, activeTab]);
-
-  // Update store when evaluation changes
-  useEffect(() => {
-    if (evaluation) {
-      setSelectedEvaluation(evaluation);
-    }
-  }, [evaluation, setSelectedEvaluation]);
 
   // Handlers
   const handleExport = () => {

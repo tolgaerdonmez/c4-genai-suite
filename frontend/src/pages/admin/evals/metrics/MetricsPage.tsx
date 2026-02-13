@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Metric } from 'src/api/generated-eval';
 import { Page, Pagination, Search } from 'src/components';
@@ -11,10 +11,8 @@ import { CreateMetricDialog } from './dialogs/CreateMetricDialog';
 import { DeleteMetricDialog } from './dialogs/DeleteMetricDialog';
 import { EditMetricDialog } from './dialogs/EditMetricDialog';
 import { PAGE_SIZE, useMetrics } from './hooks/useMetricQueries';
-import { useMetricsStore } from './state';
 
 export function MetricsPage() {
-  const { metrics, setMetrics, totalCount } = useMetricsStore();
   const navigate = useNavigate();
 
   const [page, setPage] = useState(0);
@@ -29,12 +27,6 @@ export function MetricsPage() {
   }, []);
 
   const { data: loadedMetrics, isFetching, isFetched, refetch } = useMetrics(page, query);
-
-  useEffect(() => {
-    if (loadedMetrics) {
-      setMetrics(loadedMetrics, loadedMetrics.length);
-    }
-  }, [loadedMetrics, setMetrics]);
 
   const handleChangePage = useEventCallback((newPage: number) => {
     setPage(newPage);
@@ -95,7 +87,7 @@ export function MetricsPage() {
         <div className="card bg-base-100 shadow">
           <div className="card-body">
             <MetricsTable
-              metrics={metrics}
+              metrics={loadedMetrics ?? []}
               isFetching={isFetching}
               isFetched={isFetched}
               onRowClick={handleRowClick}
@@ -104,7 +96,7 @@ export function MetricsPage() {
               isDeleting={!!metricToDelete}
             />
 
-            <Pagination page={page} pageSize={PAGE_SIZE} total={totalCount} onPage={handleChangePage} />
+            <Pagination page={page} pageSize={PAGE_SIZE} total={loadedMetrics?.length ?? 0} onPage={handleChangePage} />
           </div>
         </div>
       </Page>

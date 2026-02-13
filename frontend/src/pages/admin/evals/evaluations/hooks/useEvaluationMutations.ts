@@ -8,7 +8,6 @@ import type {
 } from 'src/api/generated-eval';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
 import { texts } from 'src/texts';
-import { useEvaluationsStore } from '../state';
 
 /**
  * Mutation hook for creating evaluations
@@ -17,7 +16,6 @@ import { useEvaluationsStore } from '../state';
 export function useCreateEvaluation() {
   const evalApi = useEvalApi();
   const queryClient = useQueryClient();
-  const { updateEvaluationInList } = useEvaluationsStore();
 
   return useMutation({
     mutationFn: (data: Dto) =>
@@ -72,13 +70,11 @@ export function useUpdateEvaluation() {
 export function useDeleteEvaluation() {
   const evalApi = useEvalApi();
   const queryClient = useQueryClient();
-  const { removeEvaluationFromList } = useEvaluationsStore();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: EvaluationDelete }) =>
       evalApi.evaluations.evaluationsDelete(id, data),
-    onSuccess: (_, variables) => {
-      removeEvaluationFromList(variables.id);
+    onSuccess: () => {
       toast.success(texts.evals.evaluations.deleteSuccess);
       queryClient.invalidateQueries({ queryKey: ['evaluations'] });
     },
