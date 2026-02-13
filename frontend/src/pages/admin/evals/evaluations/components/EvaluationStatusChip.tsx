@@ -1,5 +1,5 @@
-import { Tooltip, Loader } from '@mantine/core';
-import { IconCheck, IconAlertTriangle, IconClock } from '@tabler/icons-react';
+import { Loader, Tooltip } from '@mantine/core';
+import { IconAlertTriangle, IconCheck, IconClock } from '@tabler/icons-react';
 import { EvaluationStatus } from 'src/api/generated-eval';
 import { texts } from 'src/texts';
 

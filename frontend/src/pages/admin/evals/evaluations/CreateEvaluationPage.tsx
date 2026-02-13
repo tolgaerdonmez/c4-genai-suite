@@ -1,16 +1,16 @@
+import { Button, Group, Modal, Stack, Stepper, Text } from '@mantine/core';
+import { IconCheck } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Stack, Text, Stepper, Group, Button, Modal } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
-import { useWizardStore, useWizardStepIndex, useIsLastStep } from './create/wizardState';
-import { ModeSelectionStep } from './create/steps/ModeSelectionStep';
-import { SourceStep } from './create/steps/SourceStep';
-import { MetricsSelectionStep } from './create/steps/MetricsSelectionStep';
-import { EndpointSelectionStep } from './create/steps/EndpointSelectionStep';
-import { ReviewStep } from './create/steps/ReviewStep';
-import { useCreateEvaluation } from './hooks/useEvaluationMutations';
+import type { Dto } from 'src/api/generated-eval';
 import { texts } from 'src/texts';
-import type { Dto, RunEvaluationByQaCatalog, RunEvaluationByTestCases } from 'src/api/generated-eval';
+import { EndpointSelectionStep } from './create/steps/EndpointSelectionStep';
+import { MetricsSelectionStep } from './create/steps/MetricsSelectionStep';
+import { ModeSelectionStep } from './create/steps/ModeSelectionStep';
+import { ReviewStep } from './create/steps/ReviewStep';
+import { SourceStep } from './create/steps/SourceStep';
+import { useCreateEvaluation } from './hooks/useEvaluationMutations';
+import { useIsLastStep, useWizardStepIndex, useWizardStore } from './state/hooks';
 
 export function CreateEvaluationPage() {
   const navigate = useNavigate();
@@ -55,34 +55,24 @@ export function CreateEvaluationPage() {
   const handleConfirmCancel = () => {
     reset();
     setShowCancelDialog(false);
-    navigate('/admin/evals/evaluations');
+    void navigate('/admin/evals/evaluations');
   };
 
   const handleCreate = () => {
     // Build the DTO - map our state to the Dto type the API expects
-    const dto: Dto = {
+    // Using type assertion to handle the union type properly
+    const dto = {
       name,
       llmEndpointId: endpointId!,
       metrics: metricIds,
-    } as any;
-
-    // Add description if provided
-    if (description) {
-      (dto as any).description = description;
-    }
-
-    // Add mode-specific fields
-    if (mode === 'catalog') {
-      dto.catalogId = catalogId!;
-      dto.testCasesPerQaPair = testCasesPerQaPair || 1;
-    } else {
-      dto.testCases = testCases;
-    }
+      ...(description ? { description } : {}),
+      ...(mode === 'catalog' ? { catalogId: catalogId!, testCasesPerQaPair: testCasesPerQaPair || 1 } : { testCases }),
+    } as Dto;
 
     createEvaluationMutation.mutate(dto, {
       onSuccess: (evaluation) => {
         reset();
-        navigate(`/admin/evals/evaluations/${evaluation.id}`);
+        void navigate(`/admin/evals/evaluations/${evaluation.id}`);
       },
     });
   };
@@ -167,11 +157,7 @@ export function CreateEvaluationPage() {
                 {texts.common.next}
               </Button>
             ) : (
-              <Button
-                onClick={handleCreate}
-                disabled={!canProceed()}
-                loading={createEvaluationMutation.isPending}
-              >
+              <Button onClick={handleCreate} disabled={!canProceed()} loading={createEvaluationMutation.isPending}>
                 {texts.evals.evaluations.createEvaluation}
               </Button>
             )}

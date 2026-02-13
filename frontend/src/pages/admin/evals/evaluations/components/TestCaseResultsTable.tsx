@@ -1,7 +1,15 @@
-import { useState, useMemo } from 'react';
-import { Skeleton, Text, Badge, Tooltip, Group, Stack, ActionIcon, Table } from '@mantine/core';
-import { IconCheck, IconX, IconChevronDown, IconChevronRight, IconArrowsSort, IconSortAscending, IconSortDescending } from '@tabler/icons-react';
-import type { GroupedEvaluationResult, EvaluationDetailSummaryMetric } from 'src/api/generated-eval';
+import { ActionIcon, Badge, Group, Skeleton, Stack, Table, Text, Tooltip } from '@mantine/core';
+import {
+  IconArrowsSort,
+  IconCheck,
+  IconChevronDown,
+  IconChevronRight,
+  IconSortAscending,
+  IconSortDescending,
+  IconX,
+} from '@tabler/icons-react';
+import { useMemo, useState } from 'react';
+import type { EvaluationDetailSummaryMetric, GroupedEvaluationResult } from 'src/api/generated-eval';
 
 interface TestCaseResultsTableProps {
   results: GroupedEvaluationResult[];
@@ -42,12 +50,7 @@ interface MetricResultDetail {
 
 type SortOrder = 'none' | 'passed-first' | 'failed-first';
 
-export function TestCaseResultsTable({
-  results,
-  metrics,
-  isFetching,
-  isFetched,
-}: TestCaseResultsTableProps) {
+export function TestCaseResultsTable({ results, metrics, isFetching, isFetched }: TestCaseResultsTableProps) {
   // Expanded rows state
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
@@ -160,7 +163,7 @@ export function TestCaseResultsTable({
     <Stack gap="md">
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="table text-base w-full">
+        <table className="table w-full text-base">
           <thead>
             <tr>
               <th className="w-10"></th>
@@ -191,103 +194,114 @@ export function TestCaseResultsTable({
             {/* Loading state */}
             {isFetching && !isFetched && (
               <>
-                {[...Array(5)].map((_, i) => (
+                {Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i}>
-                    <td><Skeleton height={20} width={24} /></td>
-                    <td><Skeleton height={20} width={70} /></td>
-                    <td><Skeleton height={20} /></td>
-                    <td><Skeleton height={20} /></td>
-                    <td><Skeleton height={20} width={80} /></td>
+                    <td>
+                      <Skeleton height={20} width={24} />
+                    </td>
+                    <td>
+                      <Skeleton height={20} width={70} />
+                    </td>
+                    <td>
+                      <Skeleton height={20} />
+                    </td>
+                    <td>
+                      <Skeleton height={20} />
+                    </td>
+                    <td>
+                      <Skeleton height={20} width={80} />
+                    </td>
                   </tr>
                 ))}
               </>
             )}
 
             {/* Data rows */}
-            {isFetched && sortedRows.map((row) => {
-              const isExpanded = expandedRows.has(row.key);
+            {isFetched &&
+              sortedRows.map((row) => {
+                const isExpanded = expandedRows.has(row.key);
 
-              return (
-                <>
-                  {/* Main QA pair row */}
-                  <tr key={row.key} className="hover:bg-gray-50 cursor-pointer" onClick={() => toggleRow(row.key)}>
-                    <td>
-                      <ActionIcon variant="subtle" size="sm">
-                        {isExpanded ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
-                      </ActionIcon>
-                    </td>
-                    <td>
-                      <Badge
-                        variant={row.allPassed ? 'light' : 'filled'}
-                        color={row.allPassed ? 'teal' : 'red'}
-                        leftSection={row.allPassed ? <IconCheck size={12} /> : <IconX size={12} />}
-                        size="sm"
-                      >
-                        {row.allPassed ? 'Passed' : 'Failed'}
-                      </Badge>
-                    </td>
-                    <td>
-                      <Tooltip label={row.input} multiline maw={400} withArrow>
-                        <Text size="sm" className="line-clamp-2 cursor-help">
-                          {row.input}
-                        </Text>
-                      </Tooltip>
-                    </td>
-                    <td>
-                      <Tooltip label={row.expectedOutput} multiline maw={400} withArrow>
-                        <Text size="sm" className="line-clamp-2 cursor-help">
-                          {row.expectedOutput}
-                        </Text>
-                      </Tooltip>
-                    </td>
-                    <td>
-                      <Group gap="xs">
-                        <Badge variant="light" color="teal" size="sm">
-                          {row.passedCount} passed
+                return (
+                  <>
+                    {/* Main QA pair row */}
+                    <tr key={row.key} className="cursor-pointer hover:bg-gray-50" onClick={() => toggleRow(row.key)}>
+                      <td>
+                        <ActionIcon variant="subtle" size="sm">
+                          {isExpanded ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
+                        </ActionIcon>
+                      </td>
+                      <td>
+                        <Badge
+                          variant={row.allPassed ? 'light' : 'filled'}
+                          color={row.allPassed ? 'teal' : 'red'}
+                          leftSection={row.allPassed ? <IconCheck size={12} /> : <IconX size={12} />}
+                          size="sm"
+                        >
+                          {row.allPassed ? 'Passed' : 'Failed'}
                         </Badge>
-                        {row.failedCount > 0 && (
-                          <Badge variant="light" color="red" size="sm">
-                            {row.failedCount} failed
+                      </td>
+                      <td>
+                        <Tooltip label={row.input} multiline maw={400} withArrow>
+                          <Text size="sm" className="line-clamp-2 cursor-help">
+                            {row.input}
+                          </Text>
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <Tooltip label={row.expectedOutput} multiline maw={400} withArrow>
+                          <Text size="sm" className="line-clamp-2 cursor-help">
+                            {row.expectedOutput}
+                          </Text>
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <Group gap="xs">
+                          <Badge variant="light" color="teal" size="sm">
+                            {row.passedCount} passed
                           </Badge>
-                        )}
-                      </Group>
-                    </td>
-                  </tr>
+                          {row.failedCount > 0 && (
+                            <Badge variant="light" color="red" size="sm">
+                              {row.failedCount} failed
+                            </Badge>
+                          )}
+                        </Group>
+                      </td>
+                    </tr>
 
-                  {/* Expanded details row */}
-                  {isExpanded && (
-                    <tr key={`${row.key}-expanded`}>
-                      <td colSpan={5} className="bg-gray-50 p-0">
-                        <div className="p-4">
-                          <Stack gap="md">
-                            {row.testCases.map((tc) => (
-                              <div key={tc.id} className="border rounded-lg p-3 bg-white">
-                                <Group justify="space-between" mb="sm">
-                                  <Group gap="sm">
-                                    <Text size="sm" fw={500}>
-                                      Iteration {tc.index + 1}
-                                    </Text>
-                                    <Badge
-                                      variant={tc.allPassed ? 'light' : 'filled'}
-                                      color={tc.allPassed ? 'teal' : 'red'}
-                                      size="xs"
-                                    >
-                                      {tc.allPassed ? 'All Passed' : 'Has Failures'}
-                                    </Badge>
+                    {/* Expanded details row */}
+                    {isExpanded && (
+                      <tr key={`${row.key}-expanded`}>
+                        <td colSpan={5} className="bg-gray-50 p-0">
+                          <div className="p-4">
+                            <Stack gap="md">
+                              {row.testCases.map((tc) => (
+                                <div key={tc.id} className="rounded-lg border bg-white p-3">
+                                  <Group justify="space-between" mb="sm">
+                                    <Group gap="sm">
+                                      <Text size="sm" fw={500}>
+                                        Iteration {tc.index + 1}
+                                      </Text>
+                                      <Badge
+                                        variant={tc.allPassed ? 'light' : 'filled'}
+                                        color={tc.allPassed ? 'teal' : 'red'}
+                                        size="xs"
+                                      >
+                                        {tc.allPassed ? 'All Passed' : 'Has Failures'}
+                                      </Badge>
+                                    </Group>
                                   </Group>
-                                </Group>
 
-                                <Table size="sm" withTableBorder={false}>
-                                  <Table.Thead>
-                                    <Table.Tr>
-                                      <Table.Th>Metric</Table.Th>
-                                      <Table.Th>Score</Table.Th>
-                                      <Table.Th>Threshold</Table.Th>
-                                      <Table.Th>Status</Table.Th>
-                                    </Table.Tr>
-                                  </Table.Thead>
-                                  <Table.Tbody>
-                                    {tc.metricResults.map((mr) => (
+                                  <Table withTableBorder={false} verticalSpacing="xs" horizontalSpacing="sm">
+                                    <Table.Thead>
+                                      <Table.Tr>
+                                        <Table.Th>Metric</Table.Th>
+                                        <Table.Th>Score</Table.Th>
+                                        <Table.Th>Threshold</Table.Th>
+                                        <Table.Th>Status</Table.Th>
+                                      </Table.Tr>
+                                    </Table.Thead>
+                                    <Table.Tbody>
+                                      {tc.metricResults.map((mr) => (
                                         <Table.Tr key={mr.metricId}>
                                           <Table.Td>
                                             <Badge variant="default" size="sm">
@@ -295,11 +309,7 @@ export function TestCaseResultsTable({
                                             </Badge>
                                           </Table.Td>
                                           <Table.Td>
-                                            <Badge
-                                              variant="light"
-                                              color={getScoreColor(mr.score)}
-                                              size="sm"
-                                            >
+                                            <Badge variant="light" color={getScoreColor(mr.score)} size="sm">
                                               {mr.score !== null ? mr.score.toFixed(3) : 'N/A'}
                                             </Badge>
                                           </Table.Td>
@@ -324,14 +334,14 @@ export function TestCaseResultsTable({
                                   </Table>
                                 </div>
                               ))}
-                          </Stack>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </>
-              );
-            })}
+                            </Stack>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                );
+              })}
 
             {/* Empty state */}
             {isFetched && qaPairRows.length === 0 && (

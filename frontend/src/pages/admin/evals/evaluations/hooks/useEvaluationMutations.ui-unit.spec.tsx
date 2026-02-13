@@ -1,15 +1,16 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Dto, EvaluationDelete, EvaluationUpdate } from 'src/api/generated-eval';
+import { useEvalApi } from 'src/api/state/apiEvalClient';
 import {
   useCreateEvaluation,
-  useUpdateEvaluation,
   useDeleteEvaluation,
   useExportEvaluationResults,
+  useUpdateEvaluation,
 } from './useEvaluationMutations';
-import { useEvalApi } from 'src/api/state/apiEvalClient';
-import type { Dto, EvaluationUpdate, EvaluationDelete } from 'src/api/generated-eval';
 
 vi.mock('src/api/state/apiEvalClient');
 vi.mock('react-toastify', () => ({
@@ -61,12 +62,11 @@ describe('useEvaluationMutations', () => {
       const { result } = renderHook(() => useCreateEvaluation(), { wrapper });
 
       const createDto: Dto = {
-        runEvaluationByQaCatalog: {
-          name: 'New Evaluation',
-          catalogId: 'catalog-1',
-          endpointId: 'endpoint-1',
-          metricIds: ['metric-1'],
-        },
+        name: 'New Evaluation',
+        catalogId: 'catalog-1',
+        llmEndpointId: 'endpoint-1',
+        metrics: ['metric-1'],
+        testCasesPerQaPair: 1,
       };
 
       result.current.mutate(createDto);
@@ -86,12 +86,11 @@ describe('useEvaluationMutations', () => {
       const { result } = renderHook(() => useCreateEvaluation(), { wrapper });
 
       const createDto: Dto = {
-        runEvaluationByQaCatalog: {
-          name: 'Test',
-          catalogId: 'catalog-1',
-          endpointId: 'endpoint-1',
-          metricIds: ['metric-1'],
-        },
+        name: 'Test',
+        catalogId: 'catalog-1',
+        llmEndpointId: 'endpoint-1',
+        metrics: ['metric-1'],
+        testCasesPerQaPair: 1,
       };
 
       result.current.mutate(createDto);
@@ -116,19 +115,14 @@ describe('useEvaluationMutations', () => {
 
       const updateData: EvaluationUpdate = {
         name: 'Updated Name',
+        version: 1,
       };
 
       result.current.mutate({ id: '1', data: updateData });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(mockEvaluationsApi.evaluationsPatch).toHaveBeenCalledWith(
-        '1',
-        updateData,
-        undefined,
-        undefined,
-        undefined
-      );
+      expect(mockEvaluationsApi.evaluationsPatch).toHaveBeenCalledWith('1', updateData, undefined, undefined, undefined);
     });
 
     it('should invalidate related queries on success', async () => {
@@ -139,7 +133,7 @@ describe('useEvaluationMutations', () => {
 
       const { result } = renderHook(() => useUpdateEvaluation(), { wrapper });
 
-      result.current.mutate({ id: '1', data: { name: 'Updated' } });
+      result.current.mutate({ id: '1', data: { name: 'Updated', version: 1 } });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -155,7 +149,7 @@ describe('useEvaluationMutations', () => {
       const { result } = renderHook(() => useDeleteEvaluation(), { wrapper });
 
       const deleteData: EvaluationDelete = {
-        isDeleted: true,
+        version: 1,
       };
 
       result.current.mutate({ id: '1', data: deleteData });
@@ -172,7 +166,7 @@ describe('useEvaluationMutations', () => {
 
       const { result } = renderHook(() => useDeleteEvaluation(), { wrapper });
 
-      result.current.mutate({ id: '1', data: { isDeleted: true } });
+      result.current.mutate({ id: '1', data: { version: 1 } });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 

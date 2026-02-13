@@ -2,31 +2,27 @@ import { Button, TextInput } from '@mantine/core';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { GetAllEvaluationResult } from 'src/api/generated-eval';
 import { Page } from 'src/components';
-import { texts } from 'src/texts';
 import { useDebounce } from 'src/hooks/utils';
+import { texts } from 'src/texts';
 import { EvaluationsTable } from './components/EvaluationsTable';
 import { useEvaluations } from './hooks/useEvaluationQueries';
-import type { GetAllEvaluationResult } from 'src/api/generated-eval';
 
 export function EvaluationsPage() {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const [page, _setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  const { data: evaluations = [], isFetching, isFetched } = useEvaluations(
-    page,
-    20,
-    debouncedSearch || undefined
-  );
+  const { data: evaluations = [], isFetching, isFetched } = useEvaluations(page, 20, debouncedSearch || undefined);
 
   const handleRowClick = (evaluation: GetAllEvaluationResult) => {
-    navigate(`/admin/evals/evaluations/${evaluation.id}`);
+    void navigate(`/admin/evals/evaluations/${evaluation.id}`);
   };
 
   const handleCreateClick = () => {
-    navigate('/admin/evals/evaluations/new');
+    void navigate('/admin/evals/evaluations/new');
   };
 
   return (
@@ -53,12 +49,7 @@ export function EvaluationsPage() {
 
       <div className="card bg-base-100 shadow">
         <div className="card-body">
-          <EvaluationsTable
-            evaluations={evaluations}
-            isFetching={isFetching}
-            isFetched={isFetched}
-            onRowClick={handleRowClick}
-          />
+          <EvaluationsTable evaluations={evaluations} isFetching={isFetching} isFetched={isFetched} onRowClick={handleRowClick} />
         </div>
       </div>
     </Page>

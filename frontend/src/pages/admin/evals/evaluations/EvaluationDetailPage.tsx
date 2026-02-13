@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Stack, Group, Title, Alert, Loader, Tabs, Pagination, Card } from '@mantine/core';
+import { Alert, Card, Container, Group, Loader, Pagination, Stack, Tabs, Title } from '@mantine/core';
 import { IconAlertCircle, IconInfoCircle, IconList } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from 'src/components';
 import { texts } from 'src/texts';
-import { useEvaluationSummary } from './hooks/useEvaluationQueries';
-import { useGroupedResults } from './hooks/useEvaluationResultsQueries';
-import { useExportEvaluationResults } from './hooks/useEvaluationMutations';
+import { EvaluationActionsMenu } from './components/EvaluationActionsMenu';
 import { EvaluationCard } from './components/EvaluationCard';
 import { EvaluationStatusChip } from './components/EvaluationStatusChip';
 import { ResultsSummary } from './components/ResultsSummary';
 import { TestCaseResultsTable } from './components/TestCaseResultsTable';
-import { EvaluationActionsMenu } from './components/EvaluationActionsMenu';
 import { DeleteEvaluationDialog } from './dialogs/DeleteEvaluationDialog';
 import { EditEvaluationNameDialog } from './dialogs/EditEvaluationNameDialog';
+import { useExportEvaluationResults } from './hooks/useEvaluationMutations';
+import { useEvaluationSummary } from './hooks/useEvaluationQueries';
+import { useGroupedResults } from './hooks/useEvaluationResultsQueries';
 
 export function EvaluationDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -26,13 +26,7 @@ export function EvaluationDetailPage() {
   const exportMutation = useExportEvaluationResults();
 
   // Fetch evaluation summary
-  const {
-    data: evaluation,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useEvaluationSummary(id);
+  const { data: evaluation, isLoading, isError, error, refetch } = useEvaluationSummary(id);
 
   // Fetch results (only when Results tab is active)
   const {
@@ -47,9 +41,9 @@ export function EvaluationDetailPage() {
     if (!evaluation || evaluation.status !== 'RUNNING') return;
 
     const interval = setInterval(() => {
-      refetch();
+      void refetch();
       if (activeTab === 'results') {
-        refetchResults();
+        void refetchResults();
       }
     }, 5000); // Poll every 5 seconds
 
@@ -71,11 +65,11 @@ export function EvaluationDetailPage() {
   };
 
   const handleDeleteSuccess = () => {
-    navigate('/admin/evals/evaluations');
+    void navigate('/admin/evals/evaluations');
   };
 
   const handleEditSuccess = () => {
-    refetch();
+    void refetch();
   };
 
   // Loading state
@@ -97,11 +91,7 @@ export function EvaluationDetailPage() {
     return (
       <Page>
         <Container size="lg">
-          <Alert
-            icon={<IconAlertCircle size={16} />}
-            title={texts.evals.evaluations.errorLoading}
-            color="red"
-          >
+          <Alert icon={<IconAlertCircle size={16} />} title={texts.evals.evaluations.errorLoading} color="red">
             {error?.message || texts.evals.evaluations.errorNotFound}
           </Alert>
         </Container>
@@ -137,11 +127,7 @@ export function EvaluationDetailPage() {
 
           {/* Status Banner for Failed Evaluations */}
           {evaluation.status === 'FAILURE' && (
-            <Alert
-              icon={<IconAlertCircle size={16} />}
-              color="red"
-              title="Evaluation Failed"
-            >
+            <Alert icon={<IconAlertCircle size={16} />} color="red" title="Evaluation Failed">
               This evaluation failed to complete. Check the logs for more information.
             </Alert>
           )}

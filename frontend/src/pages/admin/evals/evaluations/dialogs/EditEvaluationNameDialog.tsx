@@ -1,9 +1,9 @@
-import { Modal, Button, TextInput, Group, Stack } from '@mantine/core';
+import { Button, Group, Modal, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useEffect } from 'react';
 import type { EvaluationDetailSummary } from 'src/api/generated-eval';
 import { texts } from 'src/texts';
 import { useUpdateEvaluation } from '../hooks/useEvaluationMutations';
-import { useEffect } from 'react';
 
 interface EditEvaluationNameDialogProps {
   evaluation: EvaluationDetailSummary | null;
@@ -12,12 +12,7 @@ interface EditEvaluationNameDialogProps {
   onSuccess?: () => void;
 }
 
-export function EditEvaluationNameDialog({
-  evaluation,
-  opened,
-  onClose,
-  onSuccess,
-}: EditEvaluationNameDialogProps) {
+export function EditEvaluationNameDialog({ evaluation, opened, onClose, onSuccess }: EditEvaluationNameDialogProps) {
   const updateMutation = useUpdateEvaluation();
 
   const form = useForm({
@@ -25,8 +20,7 @@ export function EditEvaluationNameDialog({
       name: evaluation?.name || '',
     },
     validate: {
-      name: (value) =>
-        value.trim().length === 0 ? texts.evals.evaluations.nameRequired : null,
+      name: (value) => (value.trim().length === 0 ? texts.evals.evaluations.nameRequired : null),
     },
   });
 
@@ -43,26 +37,21 @@ export function EditEvaluationNameDialog({
     updateMutation.mutate(
       {
         id: evaluation.id,
-        data: { name: values.name.trim() },
+        data: { name: values.name.trim(), version: evaluation.version },
       },
       {
         onSuccess: () => {
           onClose();
           onSuccess?.();
         },
-      }
+      },
     );
   });
 
   if (!evaluation) return null;
 
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title={texts.evals.evaluations.editNameTitle}
-      centered
-    >
+    <Modal opened={opened} onClose={onClose} title={texts.evals.evaluations.editNameTitle} centered>
       <form onSubmit={handleSubmit}>
         <Stack gap="md">
           <TextInput
@@ -77,11 +66,7 @@ export function EditEvaluationNameDialog({
             <Button variant="default" onClick={onClose} disabled={updateMutation.isPending}>
               {texts.common.cancel}
             </Button>
-            <Button
-              type="submit"
-              loading={updateMutation.isPending}
-              disabled={updateMutation.isPending}
-            >
+            <Button type="submit" loading={updateMutation.isPending} disabled={updateMutation.isPending}>
               {texts.common.save}
             </Button>
           </Group>

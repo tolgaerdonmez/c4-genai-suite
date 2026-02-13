@@ -1,6 +1,6 @@
+import { Badge, Group, Stack, Text } from '@mantine/core';
 import { useMemo } from 'react';
-import { Text, Stack, Group, Badge } from '@mantine/core';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
 interface MetricDonutChartProps {
   name: string;
@@ -13,6 +13,7 @@ interface MetricDonutChartProps {
  * A donut chart visualization for individual metric results.
  * No container - meant to be used inside a parent Card.
  */
+/* eslint-disable react/prop-types */
 export function MetricDonutChart({ name, successes, failures, errors = 0 }: MetricDonutChartProps) {
   const total = successes + failures + errors;
   const hasFailures = failures > 0 || errors > 0;
@@ -36,6 +37,7 @@ export function MetricDonutChart({ name, successes, failures, errors = 0 }: Metr
   }, [successes, failures, errors]);
 
   // Custom label renderer for showing failure count on the chart
+
   const renderCustomLabel = (props: {
     cx?: number;
     cy?: number;
@@ -56,14 +58,7 @@ export function MetricDonutChart({ name, successes, failures, errors = 0 }: Metr
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
     return (
-      <text
-        x={x}
-        y={y}
-        fill="#fff"
-        textAnchor="middle"
-        dominantBaseline="central"
-        style={{ fontSize: '12px', fontWeight: 600 }}
-      >
+      <text x={x} y={y} fill="#fff" textAnchor="middle" dominantBaseline="central" style={{ fontSize: '12px', fontWeight: 600 }}>
         {value}
       </text>
     );
@@ -128,11 +123,7 @@ export function MetricDonutChart({ name, successes, failures, errors = 0 }: Metr
       </div>
 
       {/* Pass rate badge */}
-      <Badge
-        variant="light"
-        color={passPercentage >= 70 ? 'green' : passPercentage >= 50 ? 'yellow' : 'red'}
-        size="sm"
-      >
+      <Badge variant="light" color={passPercentage >= 70 ? 'green' : passPercentage >= 50 ? 'yellow' : 'red'} size="sm">
         {passPercentage}% passed
       </Badge>
 

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { QAPair, NewQAPair } from 'src/api/generated-eval';
+import type { NewQAPair, QAPair } from 'src/api/generated-eval';
 
 /**
  * Represents a pending change to a Q&A pair
@@ -113,7 +113,9 @@ const useQaCatalogsStore_ = create<QaCatalogsState & QaCatalogsActions>()((set, 
     const { pendingChanges } = get();
 
     // Start with original pairs
-    let effectivePairs: (QAPair & { _pendingStatus?: 'added' | 'updated' | 'deleted' })[] = qaPairs.map((pair) => ({ ...pair }));
+    const effectivePairs: (QAPair & { _pendingStatus?: 'added' | 'updated' | 'deleted' })[] = qaPairs.map((pair) => ({
+      ...pair,
+    }));
 
     // Apply pending changes
     for (const change of pendingChanges) {

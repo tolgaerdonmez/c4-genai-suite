@@ -1,5 +1,5 @@
-import { Text, Stack, Group } from '@mantine/core';
-import { PieChart, Pie, Cell } from 'recharts';
+import { Group, Stack, Text } from '@mantine/core';
+import { Cell, Pie, PieChart } from 'recharts';
 
 interface TestCasesPieChartProps {
   passed: number;

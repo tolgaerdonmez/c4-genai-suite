@@ -1,4 +1,4 @@
-import { Card, Text, SimpleGrid, Stack, Group } from '@mantine/core';
+import { Card, Group, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconChartBar } from '@tabler/icons-react';
 import type { MetricResult } from 'src/api/generated-eval';
 import { MetricDonutChart } from './MetricDonutChart';

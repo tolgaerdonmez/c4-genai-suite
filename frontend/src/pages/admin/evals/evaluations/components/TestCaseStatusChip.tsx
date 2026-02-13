@@ -1,5 +1,5 @@
 import { Loader } from '@mantine/core';
-import { IconCheck, IconAlertTriangle, IconClock, IconRocket } from '@tabler/icons-react';
+import { IconAlertTriangle, IconCheck, IconClock, IconRocket } from '@tabler/icons-react';
 import { TestCaseStatus } from 'src/api/generated-eval';
 
 interface TestCaseStatusChipProps {

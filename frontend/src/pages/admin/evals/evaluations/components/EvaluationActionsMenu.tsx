@@ -1,11 +1,5 @@
-import { Menu, Button } from '@mantine/core';
-import {
-  IconDots,
-  IconFileDownload,
-  IconPencil,
-  IconTrash,
-  IconCopy,
-} from '@tabler/icons-react';
+import { Button, Menu } from '@mantine/core';
+import { IconCopy, IconDots, IconFileDownload, IconPencil, IconTrash } from '@tabler/icons-react';
 import type { EvaluationDetailSummary } from 'src/api/generated-eval';
 import { texts } from 'src/texts';
 
@@ -41,11 +35,7 @@ export function EvaluationActionsMenu({
       <Menu.Dropdown>
         <Menu.Label>Evaluation Actions</Menu.Label>
 
-        <Menu.Item
-          leftSection={<IconFileDownload size={16} />}
-          onClick={onExport}
-          disabled={!canExport}
-        >
+        <Menu.Item leftSection={<IconFileDownload size={16} />} onClick={onExport} disabled={!canExport}>
           {texts.evals.evaluations.exportCsv}
         </Menu.Item>
 
@@ -54,23 +44,14 @@ export function EvaluationActionsMenu({
         </Menu.Item>
 
         {onClone && (
-          <Menu.Item
-            leftSection={<IconCopy size={16} />}
-            onClick={onClone}
-            disabled={evaluation.status === 'RUNNING'}
-          >
+          <Menu.Item leftSection={<IconCopy size={16} />} onClick={onClone} disabled={evaluation.status === 'RUNNING'}>
             {texts.evals.evaluations.cloneEvaluation}
           </Menu.Item>
         )}
 
         <Menu.Divider />
 
-        <Menu.Item
-          leftSection={<IconTrash size={16} />}
-          onClick={onDelete}
-          disabled={!canDelete}
-          color="red"
-        >
+        <Menu.Item leftSection={<IconTrash size={16} />} onClick={onDelete} disabled={!canDelete} color="red">
           {texts.evals.evaluations.deleteEvaluation}
         </Menu.Item>
       </Menu.Dropdown>

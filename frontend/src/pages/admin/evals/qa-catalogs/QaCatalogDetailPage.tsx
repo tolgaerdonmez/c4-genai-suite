@@ -13,7 +13,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { QAPair, QACatalogVersionHistoryItem } from 'src/api/generated-eval';
+import type { QACatalogVersionHistoryItem, QAPair } from 'src/api/generated-eval';
 import { QACatalogStatus } from 'src/api/generated-eval';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
 import { ConfirmDialog, Page, Pagination } from 'src/components';
@@ -25,7 +25,7 @@ import { AddQaPairDialog } from './dialogs/AddQaPairDialog';
 import { DownloadQaCatalogDialog } from './dialogs/DownloadQaCatalogDialog';
 import { EditQaPairDialog } from './dialogs/EditQaPairDialog';
 import { UploadQaCatalogDialog } from './dialogs/UploadQaCatalogDialog';
-import { useQaCatalogsStore, type PendingChange } from './state';
+import { type PendingChange, useQaCatalogsStore } from './state';
 
 const PAGE_SIZE = 20;
 
@@ -141,10 +141,7 @@ export function QaCatalogDetailPage() {
     },
   });
 
-  const effectivePairs = useMemo(
-    () => getEffectiveQaPairs(pairsData ?? []),
-    [getEffectiveQaPairs, pairsData, pendingChanges]
-  );
+  const effectivePairs = useMemo(() => getEffectiveQaPairs(pairsData ?? []), [getEffectiveQaPairs, pairsData, pendingChanges]);
   const pendingCounts = useMemo(() => getPendingChangeCounts(), [getPendingChangeCounts]);
   const hasChanges = hasPendingChanges();
 
@@ -424,7 +421,12 @@ export function QaCatalogDetailPage() {
                   <div className="py-8 text-center text-gray-500">{texts.evals.qaCatalog.noQaPairs}</div>
                 )}
 
-                <Pagination page={page} pageSize={PAGE_SIZE} total={(pairsData?.length ?? 0) + pendingCounts.additions} onPage={setPage} />
+                <Pagination
+                  page={page}
+                  pageSize={PAGE_SIZE}
+                  total={(pairsData?.length ?? 0) + pendingCounts.additions}
+                  onPage={setPage}
+                />
               </>
             )}
           </div>

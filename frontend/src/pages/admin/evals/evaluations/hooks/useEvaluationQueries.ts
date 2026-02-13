@@ -6,26 +6,14 @@ const PAGE_SIZE = 20;
 /**
  * Query hook to fetch all evaluations with pagination, search, and date filtering
  */
-export function useEvaluations(
-  page: number,
-  limit = PAGE_SIZE,
-  query?: string,
-  fromDate?: Date,
-  toDate?: Date
-) {
+export function useEvaluations(page: number, limit = PAGE_SIZE, query?: string, fromDate?: Date, toDate?: Date) {
   const evalApi = useEvalApi();
   const offset = (page - 1) * limit;
 
   return useQuery({
     queryKey: ['evaluations', page, limit, query, fromDate, toDate],
     queryFn: () =>
-      evalApi.evaluations.evaluationsGetAll(
-        query || undefined,
-        fromDate || undefined,
-        toDate || undefined,
-        offset,
-        limit
-      ),
+      evalApi.evaluations.evaluationsGetAll(query || undefined, fromDate || undefined, toDate || undefined, offset, limit),
   });
 }
 

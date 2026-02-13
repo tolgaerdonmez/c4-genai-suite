@@ -1,15 +1,19 @@
-import { Stack, Text, Card, Group, Badge, Skeleton, Alert, Radio } from '@mantine/core';
+import { Alert, Badge, Card, Group, Radio, Skeleton, Stack, Text } from '@mantine/core';
 import { IconAlertCircle, IconRocket } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
-import { useWizardStore } from '../wizardState';
+import { useWizardStore } from '../../state/zustand/wizardState';
 
 export function EndpointSelectionStep() {
   const { endpointId, setEndpointId } = useWizardStore();
   const evalApi = useEvalApi();
 
   // Fetch available LLM endpoints
-  const { data: endpoints = [], isLoading, isError } = useQuery({
+  const {
+    data: endpoints = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['llmEndpoints', 'all'],
     queryFn: () => evalApi.llmEndpoints.llmEndpointsGetAll(undefined, undefined, 0, 100),
   });
@@ -36,8 +40,7 @@ export function EndpointSelectionStep() {
           Select LLM Endpoint
         </Text>
         <Alert icon={<IconAlertCircle size={16} />} color="red" title="No Endpoints Available">
-          No LLM endpoints found. Please create at least one LLM endpoint before creating an
-          evaluation.
+          No LLM endpoints found. Please create at least one LLM endpoint before creating an evaluation.
         </Alert>
       </Stack>
     );
@@ -49,8 +52,8 @@ export function EndpointSelectionStep() {
         Select LLM Endpoint
       </Text>
       <Text size="sm" c="dimmed">
-        Choose the LLM endpoint that will be evaluated. The evaluation will send test case
-        questions to this endpoint and measure its responses.
+        Choose the LLM endpoint that will be evaluated. The evaluation will send test case questions to this endpoint and measure
+        its responses.
       </Text>
 
       {!endpointId && (

@@ -42,7 +42,7 @@ export function MetricsPage() {
 
   const handleRowClick = useEventCallback((metric: Metric) => {
     // Navigate to detail page
-    navigate(`/admin/evals/metrics/${metric.id}`);
+    void navigate(`/admin/evals/metrics/${metric.id}`);
   });
 
   const handleEdit = useEventCallback((metric: Metric) => {
@@ -76,7 +76,7 @@ export function MetricsPage() {
           <h2 className="text-3xl">{texts.evals.metrics}</h2>
 
           <div className="flex gap-4">
-            <Search value={query} onSearch={handleSearch} placeholder={texts.evals.metric.searchPlaceholder} />
+            <Search value={query} onSearch={handleSearch} />
 
             <Button leftSection={<IconPlus />} onClick={() => setShowCreateDialog(true)}>
               {texts.evals.metric.create}
@@ -93,7 +93,7 @@ export function MetricsPage() {
               onRowClick={handleRowClick}
               onEdit={handleEdit}
               onDelete={handleDelete}
-              isDeleting={!!metricToDelete}
+              isDeleting={metricToDelete?.id}
             />
 
             <Pagination page={page} pageSize={PAGE_SIZE} total={loadedMetrics?.length ?? 0} onPage={handleChangePage} />

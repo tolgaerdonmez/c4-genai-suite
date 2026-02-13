@@ -1,7 +1,6 @@
-import { Card, Stack, Text, Radio, Group } from '@mantine/core';
+import { Card, Group, Radio, Stack, Text } from '@mantine/core';
 import { IconDatabase, IconEdit } from '@tabler/icons-react';
-import { useWizardStore, type EvaluationMode } from '../wizardState';
-import { texts } from 'src/texts';
+import { type EvaluationMode, useWizardStore } from '../../state/zustand/wizardState';
 
 export function ModeSelectionStep() {
   const { mode, setMode } = useWizardStore();
@@ -20,9 +19,7 @@ export function ModeSelectionStep() {
           <Card
             padding="md"
             withBorder
-            className={`cursor-pointer transition-all ${
-              mode === 'catalog' ? 'border-blue-500 bg-blue-50' : 'hover:bg-gray-50'
-            }`}
+            className={`cursor-pointer transition-all ${mode === 'catalog' ? 'border-blue-500 bg-blue-50' : 'hover:bg-gray-50'}`}
             onClick={() => setMode('catalog')}
           >
             <Group wrap="nowrap" align="flex-start">
@@ -33,8 +30,8 @@ export function ModeSelectionStep() {
                   <Text fw={600}>By QA Catalog</Text>
                 </Group>
                 <Text size="sm" c="dimmed">
-                  Use an existing QA catalog to run evaluations. Test cases will be automatically
-                  generated from the catalog's Q&A pairs.
+                  Use an existing QA catalog to run evaluations. Test cases will be automatically generated from the
+                  catalog&apos;s Q&A pairs.
                 </Text>
               </Stack>
             </Group>
@@ -43,9 +40,7 @@ export function ModeSelectionStep() {
           <Card
             padding="md"
             withBorder
-            className={`cursor-pointer transition-all ${
-              mode === 'manual' ? 'border-blue-500 bg-blue-50' : 'hover:bg-gray-50'
-            }`}
+            className={`cursor-pointer transition-all ${mode === 'manual' ? 'border-blue-500 bg-blue-50' : 'hover:bg-gray-50'}`}
             onClick={() => setMode('manual')}
           >
             <Group wrap="nowrap" align="flex-start">
@@ -56,8 +51,8 @@ export function ModeSelectionStep() {
                   <Text fw={600}>Manual Test Cases</Text>
                 </Group>
                 <Text size="sm" c="dimmed">
-                  Create an evaluation by manually defining test cases. Useful for custom scenarios
-                  or when you don't have a QA catalog yet.
+                  Create an evaluation by manually defining test cases. Useful for custom scenarios or when you don&apos;t have a
+                  QA catalog yet.
                 </Text>
               </Stack>
             </Group>

@@ -1,4 +1,4 @@
-import { Card, Text, Stack, Badge, Group, SimpleGrid } from '@mantine/core';
+import { Badge, Card, Group, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconChartBar } from '@tabler/icons-react';
 import type { EvaluationDetailSummary } from 'src/api/generated-eval';
 import { texts } from 'src/texts';
@@ -44,10 +44,13 @@ export function MetricsDisplay({ evaluation }: MetricsDisplayProps) {
         </Group>
 
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
-          {metrics.map((metric, index) => {
-            // Find corresponding metric result for average score
-            const metricResult = metricResults.find((mr) => mr.metricId === metric.id);
-            const avgScore = metricResult?.meanScore;
+          {metrics.map((metric) => {
+            // Find corresponding metric result for pass/fail counts
+            const metricResult = metricResults.find((mr) => mr.id === metric.id);
+            const passRate =
+              metricResult && metricResult.total > 0
+                ? Math.round((metricResult.successes / metricResult.total) * 100)
+                : undefined;
 
             return (
               <Card key={metric.id} padding="sm" withBorder>
@@ -58,9 +61,9 @@ export function MetricsDisplay({ evaluation }: MetricsDisplayProps) {
                   <Badge variant="light" size="sm" color="gray">
                     {metric.type}
                   </Badge>
-                  {avgScore !== undefined && (
+                  {typeof passRate === 'number' && (
                     <Text size="xs" c="dimmed">
-                      Avg Score: {avgScore.toFixed(3)}
+                      Pass Rate: {passRate}%
                     </Text>
                   )}
                 </Stack>

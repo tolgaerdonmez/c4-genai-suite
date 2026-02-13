@@ -1,5 +1,5 @@
-import { Card, Text, Group, Stack, Grid, Divider, Anchor } from '@mantine/core';
-import { IconCalendar, IconDatabase, IconRocket, IconChartBar } from '@tabler/icons-react';
+import { Anchor, Card, Divider, Grid, Group, Stack, Text } from '@mantine/core';
+import { IconCalendar, IconChartBar, IconDatabase, IconRocket } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import type { EvaluationDetailSummary } from 'src/api/generated-eval';
 import { texts } from 'src/texts';
@@ -32,8 +32,7 @@ export function EvaluationCard({ evaluation }: EvaluationCardProps) {
 
   // Show pie chart when evaluation has results (SUCCESS or RUNNING with results)
   const showPieChart =
-    evaluation.status === 'SUCCESS' ||
-    (evaluation.status === 'RUNNING' && evaluation.metricResults.length > 0);
+    evaluation.status === 'SUCCESS' || (evaluation.status === 'RUNNING' && evaluation.metricResults.length > 0);
 
   return (
     <Card padding="lg" radius="md" withBorder>
@@ -42,9 +41,7 @@ export function EvaluationCard({ evaluation }: EvaluationCardProps) {
         <Grid.Col span={{ base: 12, md: showPieChart ? 8 : 12 }}>
           <Stack gap="md">
             {/* Progress Bar for Running Evaluations */}
-            {evaluation.status === 'RUNNING' && (
-              <EvaluationProgressBar progress={evaluation.testCaseProgress} showLabel={true} />
-            )}
+            {evaluation.status === 'RUNNING' && <EvaluationProgressBar progress={evaluation.testCaseProgress} showLabel={true} />}
 
             {/* Metadata Grid */}
             <Stack gap="sm">

@@ -111,8 +111,7 @@ export const useWizardStore = create<WizardState & WizardActions>()((set, get) =
 
   setTestCases: (testCases: RunEvaluationByTestCasesTestCase[]) => set({ testCases }),
 
-  addTestCase: (testCase: RunEvaluationByTestCasesTestCase) =>
-    set((state) => ({ testCases: [...state.testCases, testCase] })),
+  addTestCase: (testCase: RunEvaluationByTestCasesTestCase) => set((state) => ({ testCases: [...state.testCases, testCase] })),
 
   removeTestCase: (index: number) =>
     set((state) => ({
@@ -128,9 +127,7 @@ export const useWizardStore = create<WizardState & WizardActions>()((set, get) =
 
   addMetricId: (metricId: string) =>
     set((state) => ({
-      metricIds: state.metricIds.includes(metricId)
-        ? state.metricIds
-        : [...state.metricIds, metricId],
+      metricIds: state.metricIds.includes(metricId) ? state.metricIds : [...state.metricIds, metricId],
     })),
 
   removeMetricId: (metricId: string) =>

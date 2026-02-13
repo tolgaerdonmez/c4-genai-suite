@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import type { MetricCreate, MetricUpdate, MetricDelete } from 'src/api/generated-eval';
+import type { Metric, MetricCreate, MetricDelete, MetricUpdate } from 'src/api/generated-eval';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
 import { texts } from 'src/texts';
 
@@ -30,12 +30,10 @@ export function useCreateMetric() {
 export function useUpdateMetric() {
   const evalApi = useEvalApi();
   const queryClient = useQueryClient();
-  const { updateMetricInList } = useMetricsStore();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: MetricUpdate }) => evalApi.metrics.metricsPatch(id, data),
     onSuccess: (metric: Metric) => {
-      updateMetricInList(metric);
       toast.success(texts.evals.metric.updateSuccess);
       void queryClient.invalidateQueries({ queryKey: ['metrics'] });
       void queryClient.invalidateQueries({ queryKey: ['metric', metric.id] });
@@ -59,12 +57,10 @@ export function useUpdateMetric() {
 export function useDeleteMetric() {
   const evalApi = useEvalApi();
   const queryClient = useQueryClient();
-  const { removeMetricFromList } = useMetricsStore();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: MetricDelete }) => evalApi.metrics.metricsDelete(id, data),
-    onSuccess: (_, variables) => {
-      removeMetricFromList(variables.id);
+    onSuccess: () => {
       toast.success(texts.evals.metric.deleteSuccess);
       void queryClient.invalidateQueries({ queryKey: ['metrics'] });
     },

@@ -1,11 +1,11 @@
+import { ActionIcon, Alert, Badge, Button, Card, Group, Stack, Text, Textarea } from '@mantine/core';
+import { IconAlertCircle, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
-import { Stack, Text, Button, Card, Group, Textarea, ActionIcon, Badge, Alert } from '@mantine/core';
-import { IconPlus, IconTrash, IconAlertCircle } from '@tabler/icons-react';
-import { useWizardStore } from '../wizardState';
 import type { RunEvaluationByTestCasesTestCase } from 'src/api/generated-eval';
+import { useWizardStore } from '../../state/zustand/wizardState';
 
 export function ManualTestCasesStep() {
-  const { testCases, addTestCase, removeTestCase, updateTestCase } = useWizardStore();
+  const { testCases, addTestCase, removeTestCase, updateTestCase: _updateTestCase } = useWizardStore();
   const [currentInput, setCurrentInput] = useState('');
   const [currentExpectedOutput, setCurrentExpectedOutput] = useState('');
   const [currentContext, setCurrentContext] = useState('');
@@ -76,11 +76,7 @@ export function ManualTestCasesStep() {
           />
 
           <Group justify="flex-end">
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={handleAddTestCase}
-              disabled={!canAddTestCase}
-            >
+            <Button leftSection={<IconPlus size={16} />} onClick={handleAddTestCase} disabled={!canAddTestCase}>
               Add Test Case
             </Button>
           </Group>
@@ -136,12 +132,7 @@ export function ManualTestCasesStep() {
                   )}
                 </Stack>
 
-                <ActionIcon
-                  color="red"
-                  variant="subtle"
-                  onClick={() => removeTestCase(index)}
-                  title="Remove test case"
-                >
+                <ActionIcon color="red" variant="subtle" onClick={() => removeTestCase(index)} title="Remove test case">
                   <IconTrash size={18} />
                 </ActionIcon>
               </Group>

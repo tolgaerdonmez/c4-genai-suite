@@ -1,8 +1,8 @@
-import { Stack, Text, Checkbox, Card, Group, Badge, Skeleton, Alert, SimpleGrid } from '@mantine/core';
+import { Alert, Badge, Card, Checkbox, Group, SimpleGrid, Skeleton, Stack, Text } from '@mantine/core';
 import { IconAlertCircle, IconChartBar } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
-import { useWizardStore } from '../wizardState';
+import { useWizardStore } from '../../state/zustand/wizardState';
 
 export function MetricsSelectionStep() {
   const { metricIds, addMetricId, removeMetricId } = useWizardStore();
@@ -60,8 +60,8 @@ export function MetricsSelectionStep() {
         Select Metrics
       </Text>
       <Text size="sm" c="dimmed">
-        Choose one or more metrics to evaluate your test cases. Each metric will score the LLM's responses according to different
-        criteria.
+        Choose one or more metrics to evaluate your test cases. Each metric will score the LLM&apos;s responses according to
+        different criteria.
       </Text>
 
       {metricIds.length === 0 && (
@@ -91,7 +91,7 @@ export function MetricsSelectionStep() {
                 <Stack gap="xs" className="flex-1">
                   <Group gap="xs">
                     <IconChartBar size={18} className="text-blue-600" />
-                    <Text fw={600}>{metric.name}</Text>
+                    <Text fw={600}>{metric._configuration.name}</Text>
                   </Group>
                   <Badge variant="light" size="sm" color="gray">
                     {metric._configuration.type}

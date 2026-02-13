@@ -1,8 +1,8 @@
 import { Skeleton } from '@mantine/core';
 import type { GetAllEvaluationResult } from 'src/api/generated-eval';
 import { texts } from 'src/texts';
-import { EvaluationStatusChip } from './EvaluationStatusChip';
 import { EvaluationProgressBar } from './EvaluationProgressBar';
+import { EvaluationStatusChip } from './EvaluationStatusChip';
 
 interface EvaluationsTableProps {
   evaluations: GetAllEvaluationResult[];
@@ -11,12 +11,7 @@ interface EvaluationsTableProps {
   onRowClick: (evaluation: GetAllEvaluationResult) => void;
 }
 
-export function EvaluationsTable({
-  evaluations,
-  isFetching,
-  isFetched,
-  onRowClick,
-}: EvaluationsTableProps) {
+export function EvaluationsTable({ evaluations, isFetching, isFetched, onRowClick }: EvaluationsTableProps) {
   const formatDate = (date: Date) => {
     return date.toLocaleDateString(undefined, {
       year: 'numeric',
@@ -46,7 +41,7 @@ export function EvaluationsTable({
       <tbody>
         {isFetching && !isFetched && (
           <>
-            {[...Array(5)].map((_, i) => (
+            {Array.from({ length: 5 }).map((_, i) => (
               <tr key={i}>
                 <td>
                   <Skeleton height={20} />
@@ -73,11 +68,7 @@ export function EvaluationsTable({
 
         {isFetched &&
           evaluations.map((evaluation) => (
-            <tr
-              className="cursor-pointer hover:bg-gray-50"
-              key={evaluation.id}
-              onClick={() => onRowClick(evaluation)}
-            >
+            <tr className="cursor-pointer hover:bg-gray-50" key={evaluation.id} onClick={() => onRowClick(evaluation)}>
               <td className="truncate overflow-hidden font-semibold">{evaluation.name}</td>
               <td className="truncate overflow-hidden">
                 {evaluation.catalog ? (
@@ -94,7 +85,7 @@ export function EvaluationsTable({
               </td>
               <td className="overflow-hidden">
                 <EvaluationProgressBar progress={evaluation.testCaseProgress} showLabel={false} />
-                <div className="text-xs text-gray-600 mt-1">
+                <div className="mt-1 text-xs text-gray-600">
                   {evaluation.testCaseProgress.done} / {evaluation.testCaseProgress.total}
                 </div>
               </td>

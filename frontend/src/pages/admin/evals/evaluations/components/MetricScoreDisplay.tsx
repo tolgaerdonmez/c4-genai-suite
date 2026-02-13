@@ -8,11 +8,7 @@ interface MetricScoreDisplayProps {
   showLabel?: boolean;
 }
 
-export function MetricScoreDisplay({
-  result,
-  metricName,
-  showLabel = false,
-}: MetricScoreDisplayProps) {
+export function MetricScoreDisplay({ result, metricName, showLabel = false }: MetricScoreDisplayProps) {
   const score = result.score;
   const threshold = result.threashold; // Note: API has typo "threashold"
   const success = result.success;
@@ -39,12 +35,7 @@ export function MetricScoreDisplay({
 
   return (
     <Tooltip label={tooltipContent} multiline withArrow>
-      <Badge
-        variant="filled"
-        color={color}
-        leftSection={success ? <IconCheck size={12} /> : <IconX size={12} />}
-        size="sm"
-      >
+      <Badge variant="filled" color={color} leftSection={success ? <IconCheck size={12} /> : <IconX size={12} />} size="sm">
         {showLabel && metricName ? `${metricName}: ` : ''}
         {displayScore}
       </Badge>

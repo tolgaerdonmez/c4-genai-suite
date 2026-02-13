@@ -32,7 +32,7 @@ export function LlmEndpointsPage() {
   // If we got PAGE_SIZE items, there might be more pages
   const hasMorePages = endpoints.length === PAGE_SIZE;
   // Calculate an effective total for the Pagination component
-  const effectiveTotal = hasMorePages ? (page + 2) * PAGE_SIZE : (page * PAGE_SIZE) + endpoints.length;
+  const effectiveTotal = hasMorePages ? (page + 2) * PAGE_SIZE : page * PAGE_SIZE + endpoints.length;
 
   const handleChangePage = useEventCallback((newPage: number) => {
     setPage(newPage);

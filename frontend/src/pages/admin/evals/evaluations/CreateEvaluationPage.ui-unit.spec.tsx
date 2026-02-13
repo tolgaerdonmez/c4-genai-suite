@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MantineProvider } from '@mantine/core';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { MantineProvider } from '@mantine/core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CreateEvaluationPage } from './CreateEvaluationPage';
-import { useWizardStore } from './create/wizardState';
+import { useWizardStore } from './state/hooks';
 
 // Mock the API client
 vi.mock('src/api/state/apiEvalClient', () => ({
@@ -73,7 +73,7 @@ function renderWithProviders(ui: React.ReactElement) {
           </Routes>
         </MemoryRouter>
       </QueryClientProvider>
-    </MantineProvider>
+    </MantineProvider>,
   );
 }
 
@@ -92,13 +92,16 @@ describe('CreateEvaluationPage', () => {
   it('should render stepper component', () => {
     renderWithProviders(<CreateEvaluationPage />);
     // Mantine stepper should be present with step buttons
-    const stepButtons = screen.getAllByRole('button').filter((btn) =>
-      btn.textContent?.includes('Source Mode') ||
-      btn.textContent?.includes('Test Cases') ||
-      btn.textContent?.includes('Metrics') ||
-      btn.textContent?.includes('LLM Endpoint') ||
-      btn.textContent?.includes('Review')
-    );
+    const stepButtons = screen
+      .getAllByRole('button')
+      .filter(
+        (btn) =>
+          btn.textContent?.includes('Source Mode') ||
+          btn.textContent?.includes('Test Cases') ||
+          btn.textContent?.includes('Metrics') ||
+          btn.textContent?.includes('LLM Endpoint') ||
+          btn.textContent?.includes('Review'),
+      );
     expect(stepButtons.length).toBeGreaterThanOrEqual(5);
   });
 

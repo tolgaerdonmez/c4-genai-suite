@@ -1,10 +1,11 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
-import { useEvaluations, useEvaluation, useEvaluationSummary } from './useEvaluationQueries';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { EvaluationDetailSummary, GetAllEvaluationResult } from 'src/api/generated-eval';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
-import type { GetAllEvaluationResult, EvaluationDetailSummary } from 'src/api/generated-eval';
+import { useEvaluation, useEvaluations, useEvaluationSummary } from './useEvaluationQueries';
 
 vi.mock('src/api/state/apiEvalClient');
 
@@ -66,13 +67,7 @@ describe('useEvaluationQueries', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(mockEvaluationsApi.evaluationsGetAll).toHaveBeenCalledWith(
-        undefined,
-        undefined,
-        undefined,
-        0,
-        10
-      );
+      expect(mockEvaluationsApi.evaluationsGetAll).toHaveBeenCalledWith(undefined, undefined, undefined, 0, 10);
       expect(result.current.data).toEqual(mockEvaluations);
     });
 
@@ -92,20 +87,11 @@ describe('useEvaluationQueries', () => {
 
       mockEvaluationsApi.evaluationsGetAll.mockResolvedValue(mockEvaluations);
 
-      const { result } = renderHook(
-        () => useEvaluations(1, 10, undefined, fromDate, toDate),
-        { wrapper }
-      );
+      const { result } = renderHook(() => useEvaluations(1, 10, undefined, fromDate, toDate), { wrapper });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(mockEvaluationsApi.evaluationsGetAll).toHaveBeenCalledWith(
-        undefined,
-        fromDate,
-        toDate,
-        0,
-        10
-      );
+      expect(mockEvaluationsApi.evaluationsGetAll).toHaveBeenCalledWith(undefined, fromDate, toDate, 0, 10);
     });
 
     it('should calculate offset from page number', async () => {
@@ -120,7 +106,7 @@ describe('useEvaluationQueries', () => {
         undefined,
         undefined,
         40, // (page 3 - 1) * 20
-        20
+        20,
       );
     });
   });

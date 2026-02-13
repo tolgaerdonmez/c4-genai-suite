@@ -1,4 +1,4 @@
-import { useWizardStore } from '../wizardState';
+import { useWizardStore } from '../../state/zustand/wizardState';
 import { CatalogSelectionStep } from './CatalogSelectionStep';
 import { ManualTestCasesStep } from './ManualTestCasesStep';
 

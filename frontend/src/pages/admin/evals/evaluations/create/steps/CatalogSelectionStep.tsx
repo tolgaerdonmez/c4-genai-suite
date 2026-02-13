@@ -1,12 +1,11 @@
-import { Stack, Text, Select, NumberInput, Card, Group, Badge, Skeleton } from '@mantine/core';
+import { Badge, Card, Group, NumberInput, Select, Skeleton, Stack, Text } from '@mantine/core';
 import { IconDatabase } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
-import { useWizardStore } from '../wizardState';
+import { useWizardStore } from '../../state/zustand/wizardState';
 
 export function CatalogSelectionStep() {
-  const { catalogId, setCatalogId, testCasesPerQaPair, setTestCasesPerQaPair } =
-    useWizardStore();
+  const { catalogId, setCatalogId, testCasesPerQaPair, setTestCasesPerQaPair } = useWizardStore();
   const evalApi = useEvalApi();
 
   // Fetch QA catalogs (only READY ones)
@@ -63,9 +62,6 @@ export function CatalogSelectionStep() {
                 <Text size="sm" c="dimmed">
                   {selectedCatalog.length} Q&A pairs • Revision {selectedCatalog.revision}
                 </Text>
-                {selectedCatalog.description && (
-                  <Text size="sm">{selectedCatalog.description}</Text>
-                )}
               </Stack>
             </Card>
           )}

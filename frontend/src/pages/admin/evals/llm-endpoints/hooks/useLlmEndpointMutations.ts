@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import type { LLMEndpointCreate, LLMEndpointUpdate, LLMEndpointDelete, LLMEndpoint } from 'src/api/generated-eval';
+import type { LLMEndpoint, LLMEndpointCreate, LLMEndpointDelete, LLMEndpointUpdate } from 'src/api/generated-eval';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
 import { texts } from 'src/texts';
 
@@ -17,9 +17,9 @@ export function useCreateLlmEndpoint() {
     mutationFn: (data: LLMEndpointCreate) => evalApi.llmEndpoints.llmEndpointsPost(data),
     onSuccess: (_endpoint: LLMEndpoint) => {
       toast.success(texts.evals.llmEndpoint.createSuccess);
-      queryClient.invalidateQueries({ queryKey: ['llmEndpoints'] });
+      void queryClient.invalidateQueries({ queryKey: ['llmEndpoints'] });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Failed to create endpoint:', error);
       toast.error(texts.evals.llmEndpoint.createFailed);
     },
@@ -37,14 +37,14 @@ export function useUpdateLlmEndpoint() {
     mutationFn: ({ id, data }: { id: string; data: LLMEndpointUpdate }) => evalApi.llmEndpoints.llmEndpointsPatch(id, data),
     onSuccess: (endpoint: LLMEndpoint) => {
       toast.success(texts.evals.llmEndpoint.updateSuccess);
-      queryClient.invalidateQueries({ queryKey: ['llmEndpoints'] });
-      queryClient.invalidateQueries({ queryKey: ['llmEndpoint', endpoint.id] });
+      void queryClient.invalidateQueries({ queryKey: ['llmEndpoints'] });
+      void queryClient.invalidateQueries({ queryKey: ['llmEndpoint', endpoint.id] });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Failed to update endpoint:', error);
 
       // Handle version conflict (409)
-      if (error?.status === 409) {
+      if (error && typeof error === 'object' && 'status' in error && error.status === 409) {
         toast.error(texts.evals.llmEndpoint.versionConflict);
       } else {
         toast.error(texts.evals.llmEndpoint.updateFailed);
@@ -64,13 +64,13 @@ export function useDeleteLlmEndpoint() {
     mutationFn: ({ id, data }: { id: string; data: LLMEndpointDelete }) => evalApi.llmEndpoints.llmEndpointsDelete(id, data),
     onSuccess: () => {
       toast.success(texts.evals.llmEndpoint.deleteSuccess);
-      queryClient.invalidateQueries({ queryKey: ['llmEndpoints'] });
+      void queryClient.invalidateQueries({ queryKey: ['llmEndpoints'] });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Failed to delete endpoint:', error);
 
       // Handle version conflict (409)
-      if (error?.status === 409) {
+      if (error && typeof error === 'object' && 'status' in error && error.status === 409) {
         toast.error(texts.evals.llmEndpoint.versionConflict);
       } else {
         toast.error(texts.evals.llmEndpoint.deleteFailed);

@@ -1,35 +1,25 @@
-import { Stack, Text, TextInput, Textarea, Card, Group, Badge, Divider } from '@mantine/core';
-import { IconDatabase, IconEdit, IconChartBar, IconRocket } from '@tabler/icons-react';
+import { Badge, Card, Divider, Group, Stack, Text, Textarea, TextInput } from '@mantine/core';
+import { IconChartBar, IconDatabase, IconEdit, IconRocket } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEvalApi } from 'src/api/state/apiEvalClient';
-import { useWizardStore } from '../wizardState';
+import { useWizardStore } from '../../state/zustand/wizardState';
 
 export function ReviewStep() {
-  const {
-    mode,
-    name,
-    description,
-    setName,
-    setDescription,
-    catalogId,
-    testCasesPerQaPair,
-    testCases,
-    metricIds,
-    endpointId,
-  } = useWizardStore();
+  const { mode, name, description, setName, setDescription, catalogId, testCasesPerQaPair, testCases, metricIds, endpointId } =
+    useWizardStore();
 
   const evalApi = useEvalApi();
 
-  // Fetch selected resources for display
+  // Fetch selected resources for display (use preview to get length)
   const { data: catalog } = useQuery({
-    queryKey: ['qaCatalog', catalogId],
-    queryFn: () => evalApi.qaCatalog.qaCatalogGet(catalogId!),
+    queryKey: ['qaCatalogPreview', catalogId],
+    queryFn: () => evalApi.qaCatalog.qaCatalogGetPreview(catalogId!),
     enabled: !!catalogId && mode === 'catalog',
   });
 
   const { data: metrics = [] } = useQuery({
     queryKey: ['metrics', 'all'],
-    queryFn: () => evalApi.metrics.metricsGetAll(undefined, 0, 100),
+    queryFn: () => evalApi.metrics.metricsGetAll(0, 100),
   });
 
   const { data: endpoint } = useQuery({
@@ -87,13 +77,22 @@ export function ReviewStep() {
           {mode === 'catalog' && catalog && (
             <>
               <Text size="sm">
-                QA Catalog: <Text component="span" fw={600}>{catalog.name}</Text>
+                QA Catalog:{' '}
+                <Text component="span" fw={600}>
+                  {catalog.name}
+                </Text>
               </Text>
               <Text size="sm">
-                Q&A Pairs: <Text component="span" fw={600}>{catalog.length ?? 0}</Text>
+                Q&A Pairs:{' '}
+                <Text component="span" fw={600}>
+                  {catalog.length ?? 0}
+                </Text>
               </Text>
               <Text size="sm">
-                Test Cases per Pair: <Text component="span" fw={600}>{testCasesPerQaPair ?? 1}</Text>
+                Test Cases per Pair:{' '}
+                <Text component="span" fw={600}>
+                  {testCasesPerQaPair ?? 1}
+                </Text>
               </Text>
               <Text size="sm" c="dimmed">
                 Estimated total test cases:{' '}
@@ -124,7 +123,7 @@ export function ReviewStep() {
           <Group gap="xs">
             {selectedMetrics.map((metric) => (
               <Badge key={metric.id} variant="light">
-                {metric.name}
+                {metric._configuration.name}
               </Badge>
             ))}
           </Group>

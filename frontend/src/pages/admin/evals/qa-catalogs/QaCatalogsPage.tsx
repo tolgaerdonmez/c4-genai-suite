@@ -42,7 +42,7 @@ export function QaCatalogsPage() {
     mutationFn: (catalogId: string) => evalApi.qaCatalog.qaCatalogDelete(catalogId),
     onSuccess: () => {
       toast.success(texts.evals.qaCatalog.deleteSuccess);
-      queryClient.invalidateQueries({ queryKey: ['qaCatalogs'] });
+      void queryClient.invalidateQueries({ queryKey: ['qaCatalogs'] });
     },
     onError: () => {
       toast.error(texts.evals.qaCatalog.deleteFailed);
@@ -58,11 +58,11 @@ export function QaCatalogsPage() {
   });
 
   const handleCreated = useEventCallback(() => {
-    refetch();
+    void refetch();
   });
 
   const handleRowClick = useEventCallback((catalog: QACatalogPreview) => {
-    navigate(`/admin/evals/qa-catalogs/${catalog.id}`);
+    void navigate(`/admin/evals/qa-catalogs/${catalog.id}`);
   });
 
   const formatDate = (date: Date) => {
@@ -104,7 +104,7 @@ export function QaCatalogsPage() {
               <tbody>
                 {isFetching && !isFetched && (
                   <>
-                    {[...Array(5)].map((_, i) => (
+                    {Array.from({ length: 5 }).map((_, i) => (
                       <tr key={i}>
                         <td>
                           <Skeleton height={20} />
