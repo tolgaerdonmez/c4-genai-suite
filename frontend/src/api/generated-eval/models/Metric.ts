@@ -14,12 +14,8 @@
  */
 
 import { mapValues } from '../runtime';
-import type { MetricConfigurationRead } from './MetricConfigurationRead';
-import {
-  MetricConfigurationReadFromJSON,
-  MetricConfigurationReadFromJSONTyped,
-  MetricConfigurationReadToJSON,
-} from './MetricConfigurationRead';
+import type { ModelConfiguration } from './ModelConfiguration';
+import { ModelConfigurationFromJSON, ModelConfigurationFromJSONTyped, ModelConfigurationToJSON } from './ModelConfiguration';
 
 /**
  *
@@ -47,10 +43,10 @@ export interface Metric {
   updatedAt: Date;
   /**
    *
-   * @type {MetricConfigurationRead}
+   * @type {ModelConfiguration}
    * @memberof Metric
    */
-  _configuration: MetricConfigurationRead;
+  _configuration: ModelConfiguration;
   /**
    *
    * @type {number}
@@ -83,7 +79,7 @@ export function MetricFromJSONTyped(json: any, ignoreDiscriminator: boolean): Me
     id: json['id'],
     createdAt: new Date(json['createdAt']),
     updatedAt: new Date(json['updatedAt']),
-    _configuration: MetricConfigurationReadFromJSON(json['configuration']),
+    _configuration: ModelConfigurationFromJSON(json['configuration']),
     version: json['version'],
   };
 }
@@ -96,7 +92,7 @@ export function MetricToJSON(value?: Metric | null): any {
     id: value['id'],
     createdAt: value['createdAt'].toISOString(),
     updatedAt: value['updatedAt'].toISOString(),
-    configuration: MetricConfigurationReadToJSON(value['_configuration']),
+    configuration: ModelConfigurationToJSON(value['_configuration']),
     version: value['version'],
   };
 }

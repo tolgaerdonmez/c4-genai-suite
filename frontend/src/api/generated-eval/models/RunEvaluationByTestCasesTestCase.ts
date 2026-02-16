@@ -64,10 +64,10 @@ export interface RunEvaluationByTestCasesTestCase {
   retrievalContext?: Array<string> | null;
   /**
    *
-   * @type {{ [key: string]: any; }}
+   * @type {{ [key: string]: any | undefined; }}
    * @memberof RunEvaluationByTestCasesTestCase
    */
-  metaData?: { [key: string]: any } | null;
+  metaData?: { [key: string]: any | undefined } | null;
   /**
    *
    * @type {string}

@@ -81,6 +81,18 @@ export interface GetAllEvaluationResult {
    * @memberof GetAllEvaluationResult
    */
   version: number;
+  /**
+   *
+   * @type {number}
+   * @memberof GetAllEvaluationResult
+   */
+  c4AssistantId?: number | null;
+  /**
+   *
+   * @type {string}
+   * @memberof GetAllEvaluationResult
+   */
+  c4AssistantName?: string | null;
 }
 
 /**
@@ -115,6 +127,8 @@ export function GetAllEvaluationResultFromJSONTyped(json: any, ignoreDiscriminat
     status: EvaluationStatusFromJSON(json['status']),
     testCaseProgress: TestCaseProgressFromJSON(json['testCaseProgress']),
     version: json['version'],
+    c4AssistantId: json['c4AssistantId'] == null ? undefined : json['c4AssistantId'],
+    c4AssistantName: json['c4AssistantName'] == null ? undefined : json['c4AssistantName'],
   };
 }
 
@@ -131,5 +145,7 @@ export function GetAllEvaluationResultToJSON(value?: GetAllEvaluationResult | nu
     status: EvaluationStatusToJSON(value['status']),
     testCaseProgress: TestCaseProgressToJSON(value['testCaseProgress']),
     version: value['version'],
+    c4AssistantId: value['c4AssistantId'],
+    c4AssistantName: value['c4AssistantName'],
   };
 }

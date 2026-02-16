@@ -75,10 +75,10 @@ export interface GroupedEvaluationResult {
   groupingKey: string | null;
   /**
    *
-   * @type {{ [key: string]: JSONVal; }}
+   * @type {{ [key: string]: JSONVal | undefined; }}
    * @memberof GroupedEvaluationResult
    */
-  metaData: { [key: string]: JSONVal };
+  metaData: { [key: string]: JSONVal | undefined };
   /**
    *
    * @type {Array<MetricResult>}

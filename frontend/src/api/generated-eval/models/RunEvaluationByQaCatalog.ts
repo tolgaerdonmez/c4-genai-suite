@@ -34,12 +34,6 @@ export interface RunEvaluationByQaCatalog {
   catalogId: string;
   /**
    *
-   * @type {string}
-   * @memberof RunEvaluationByQaCatalog
-   */
-  llmEndpointId: string;
-  /**
-   *
    * @type {Array<string>}
    * @memberof RunEvaluationByQaCatalog
    */
@@ -50,6 +44,24 @@ export interface RunEvaluationByQaCatalog {
    * @memberof RunEvaluationByQaCatalog
    */
   testCasesPerQaPair?: number;
+  /**
+   *
+   * @type {string}
+   * @memberof RunEvaluationByQaCatalog
+   */
+  llmEndpointId?: string | null;
+  /**
+   *
+   * @type {number}
+   * @memberof RunEvaluationByQaCatalog
+   */
+  c4AssistantId?: number | null;
+  /**
+   *
+   * @type {string}
+   * @memberof RunEvaluationByQaCatalog
+   */
+  c4AssistantName?: string | null;
 }
 
 /**
@@ -58,7 +70,6 @@ export interface RunEvaluationByQaCatalog {
 export function instanceOfRunEvaluationByQaCatalog(value: object): value is RunEvaluationByQaCatalog {
   if (!('name' in value) || value['name'] === undefined) return false;
   if (!('catalogId' in value) || value['catalogId'] === undefined) return false;
-  if (!('llmEndpointId' in value) || value['llmEndpointId'] === undefined) return false;
   if (!('metrics' in value) || value['metrics'] === undefined) return false;
   return true;
 }
@@ -74,9 +85,11 @@ export function RunEvaluationByQaCatalogFromJSONTyped(json: any, ignoreDiscrimin
   return {
     name: json['name'],
     catalogId: json['catalogId'],
-    llmEndpointId: json['llmEndpointId'],
     metrics: json['metrics'],
     testCasesPerQaPair: json['testCasesPerQaPair'] == null ? undefined : json['testCasesPerQaPair'],
+    llmEndpointId: json['llmEndpointId'] == null ? undefined : json['llmEndpointId'],
+    c4AssistantId: json['c4AssistantId'] == null ? undefined : json['c4AssistantId'],
+    c4AssistantName: json['c4AssistantName'] == null ? undefined : json['c4AssistantName'],
   };
 }
 
@@ -87,8 +100,10 @@ export function RunEvaluationByQaCatalogToJSON(value?: RunEvaluationByQaCatalog 
   return {
     name: value['name'],
     catalogId: value['catalogId'],
-    llmEndpointId: value['llmEndpointId'],
     metrics: value['metrics'],
     testCasesPerQaPair: value['testCasesPerQaPair'],
+    llmEndpointId: value['llmEndpointId'],
+    c4AssistantId: value['c4AssistantId'],
+    c4AssistantName: value['c4AssistantName'],
   };
 }

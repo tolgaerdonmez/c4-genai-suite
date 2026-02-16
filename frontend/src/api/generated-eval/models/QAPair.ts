@@ -46,10 +46,10 @@ export interface QAPair {
   contexts: Array<string>;
   /**
    *
-   * @type {{ [key: string]: any; }}
+   * @type {{ [key: string]: any | undefined; }}
    * @memberof QAPair
    */
-  metaData: { [key: string]: any };
+  metaData: { [key: string]: any | undefined };
 }
 
 /**

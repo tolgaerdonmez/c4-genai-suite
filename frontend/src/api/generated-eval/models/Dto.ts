@@ -50,13 +50,7 @@ export interface Dto {
    * @type {string}
    * @memberof Dto
    */
-  catalogId?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Dto
-   */
-  llmEndpointId: string;
+  catalogId: string;
   /**
    *
    * @type {Array<string>}
@@ -71,10 +65,28 @@ export interface Dto {
   testCasesPerQaPair?: number;
   /**
    *
+   * @type {string}
+   * @memberof Dto
+   */
+  llmEndpointId?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof Dto
+   */
+  c4AssistantId?: number;
+  /**
+   *
+   * @type {string}
+   * @memberof Dto
+   */
+  c4AssistantName?: string;
+  /**
+   *
    * @type {Array<RunEvaluationByTestCasesTestCase>}
    * @memberof Dto
    */
-  testCases?: Array<RunEvaluationByTestCasesTestCase>;
+  testCases: Array<RunEvaluationByTestCasesTestCase>;
 }
 
 /**
@@ -82,9 +94,9 @@ export interface Dto {
  */
 export function instanceOfDto(value: object): value is Dto {
   if (!('name' in value) || value['name'] === undefined) return false;
-  if (!('llmEndpointId' in value) || value['llmEndpointId'] === undefined) return false;
+  if (!('catalogId' in value) || value['catalogId'] === undefined) return false;
   if (!('metrics' in value) || value['metrics'] === undefined) return false;
-  // catalogId and testCases are optional (mutually exclusive)
+  if (!('testCases' in value) || value['testCases'] === undefined) return false;
   return true;
 }
 
@@ -99,11 +111,12 @@ export function DtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Dto {
   return {
     name: json['name'],
     catalogId: json['catalogId'],
-    llmEndpointId: json['llmEndpointId'],
     metrics: json['metrics'],
     testCasesPerQaPair: json['testCasesPerQaPair'] == null ? undefined : json['testCasesPerQaPair'],
-    testCases:
-      json['testCases'] == null ? undefined : (json['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseFromJSON),
+    llmEndpointId: json['llmEndpointId'] == null ? undefined : json['llmEndpointId'],
+    c4AssistantId: json['c4AssistantId'] == null ? undefined : json['c4AssistantId'],
+    c4AssistantName: json['c4AssistantName'] == null ? undefined : json['c4AssistantName'],
+    testCases: (json['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseFromJSON),
   };
 }
 
@@ -111,29 +124,14 @@ export function DtoToJSON(value?: Dto | null): any {
   if (value == null) {
     return value;
   }
-
-  // Backend expects camelCase field names (Pydantic alias_generator=to_camel)
-  const result: any = {
+  return {
     name: value['name'],
-    llmEndpointId: value['llmEndpointId'],
+    catalogId: value['catalogId'],
     metrics: value['metrics'],
+    testCasesPerQaPair: value['testCasesPerQaPair'],
+    llmEndpointId: value['llmEndpointId'],
+    c4AssistantId: value['c4AssistantId'],
+    c4AssistantName: value['c4AssistantName'],
+    testCases: (value['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseToJSON),
   };
-
-  // Add description if present
-  if ((value as any)['description']) {
-    result['description'] = (value as any)['description'];
-  }
-
-  // Catalog mode - send catalogId and testCasesPerQaPair
-  if (value['catalogId']) {
-    result['catalogId'] = value['catalogId'];
-    result['testCasesPerQaPair'] = value['testCasesPerQaPair'] || 1;
-  }
-
-  // Manual mode - send testCases
-  if (value['testCases'] && value['testCases'].length > 0) {
-    result['testCases'] = (value['testCases'] as Array<any>).map(RunEvaluationByTestCasesTestCaseToJSON);
-  }
-
-  return result;
 }

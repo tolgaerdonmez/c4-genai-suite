@@ -14,12 +14,8 @@
  */
 
 import { mapValues } from '../runtime';
-import type { MetricConfigurationUpdate } from './MetricConfigurationUpdate';
-import {
-  MetricConfigurationUpdateFromJSON,
-  MetricConfigurationUpdateFromJSONTyped,
-  MetricConfigurationUpdateToJSON,
-} from './MetricConfigurationUpdate';
+import type { Configuration2 } from './Configuration2';
+import { Configuration2FromJSON, Configuration2FromJSONTyped, Configuration2ToJSON } from './Configuration2';
 
 /**
  *
@@ -35,10 +31,10 @@ export interface MetricUpdate {
   version: number;
   /**
    *
-   * @type {MetricConfigurationUpdate}
+   * @type {Configuration2}
    * @memberof MetricUpdate
    */
-  _configuration: MetricConfigurationUpdate;
+  _configuration: Configuration2;
 }
 
 /**
@@ -60,7 +56,7 @@ export function MetricUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolea
   }
   return {
     version: json['version'],
-    _configuration: MetricConfigurationUpdateFromJSON(json['configuration']),
+    _configuration: Configuration2FromJSON(json['configuration']),
   };
 }
 
@@ -70,6 +66,6 @@ export function MetricUpdateToJSON(value?: MetricUpdate | null): any {
   }
   return {
     version: value['version'],
-    configuration: MetricConfigurationUpdateToJSON(value['_configuration']),
+    configuration: Configuration2ToJSON(value['_configuration']),
   };
 }

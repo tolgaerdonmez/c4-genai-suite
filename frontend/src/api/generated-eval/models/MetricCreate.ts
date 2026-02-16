@@ -14,12 +14,8 @@
  */
 
 import { mapValues } from '../runtime';
-import type { MetricConfigurationCreate } from './MetricConfigurationCreate';
-import {
-  MetricConfigurationCreateFromJSON,
-  MetricConfigurationCreateFromJSONTyped,
-  MetricConfigurationCreateToJSON,
-} from './MetricConfigurationCreate';
+import type { Configuration1 } from './Configuration1';
+import { Configuration1FromJSON, Configuration1FromJSONTyped, Configuration1ToJSON } from './Configuration1';
 
 /**
  *
@@ -29,10 +25,10 @@ import {
 export interface MetricCreate {
   /**
    *
-   * @type {MetricConfigurationCreate}
+   * @type {Configuration1}
    * @memberof MetricCreate
    */
-  _configuration: MetricConfigurationCreate;
+  _configuration: Configuration1;
 }
 
 /**
@@ -52,7 +48,7 @@ export function MetricCreateFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return json;
   }
   return {
-    _configuration: MetricConfigurationCreateFromJSON(json['configuration']),
+    _configuration: Configuration1FromJSON(json['configuration']),
   };
 }
 
@@ -61,6 +57,6 @@ export function MetricCreateToJSON(value?: MetricCreate | null): any {
     return value;
   }
   return {
-    configuration: MetricConfigurationCreateToJSON(value['_configuration']),
+    configuration: Configuration1ToJSON(value['_configuration']),
   };
 }

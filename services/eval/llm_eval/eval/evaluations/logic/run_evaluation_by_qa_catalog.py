@@ -23,9 +23,12 @@ from llm_eval.schemas import ApiModel
 class RunEvaluationByQaCatalog(ApiModel):
     name: str
     catalog_id: str
-    llm_endpoint_id: str
     metrics: list[str]
     test_cases_per_qa_pair: int = 3
+    # Either llm_endpoint_id OR c4_assistant_id must be provided
+    llm_endpoint_id: str | None = None
+    c4_assistant_id: int | None = None
+    c4_assistant_name: str | None = None
 
 
 class StartRunEvaluationByQaCatalogLogic:
@@ -37,10 +40,17 @@ class StartRunEvaluationByQaCatalogLogic:
     async def run(
         self, dto: RunEvaluationByQaCatalog, principal: UserPrincipal
     ) -> Evaluation:
-        llm_endpoint = await find_llm_endpoint(self._session, dto.llm_endpoint_id)
+        # Validate that either llm_endpoint_id or c4_assistant_id is provided
+        if dto.llm_endpoint_id is None and dto.c4_assistant_id is None:
+            raise bad_request(
+                "Either llm_endpoint_id or c4_assistant_id must be provided."
+            )
 
-        if llm_endpoint is None:
-            raise bad_request(f"No LLM endpoint found for ID {dto.llm_endpoint_id}")
+        # Validate LLM endpoint if provided
+        if dto.llm_endpoint_id is not None:
+            llm_endpoint = await find_llm_endpoint(self._session, dto.llm_endpoint_id)
+            if llm_endpoint is None:
+                raise bad_request(f"No LLM endpoint found for ID {dto.llm_endpoint_id}")
 
         metrics = await find_metrics_by_ids(self._session, dto.metrics)
 
@@ -59,6 +69,12 @@ class StartRunEvaluationByQaCatalogLogic:
             llm_endpoint_id=dto.llm_endpoint_id,
             status=EvaluationStatus.PENDING,
             metrics=metrics,
+            # Store callback user context for service-to-service auth
+            callback_user_id=principal.id,
+            callback_user_name=principal.name,
+            # Store C4 assistant info if provided
+            c4_assistant_id=dto.c4_assistant_id,
+            c4_assistant_name=dto.c4_assistant_name,
         )
 
         self._session.add(evaluation)
