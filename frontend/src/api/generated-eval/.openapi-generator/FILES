@@ -16,9 +16,6 @@ models/AzureOpenAILLMEndpointConfigurationCreate.ts
 models/AzureOpenAILLMEndpointConfigurationRead.ts
 models/AzureOpenAILLMEndpointConfigurationUpdate.ts
 models/Baseurl.ts
-models/C4LLMEndpointConfigurationCreate.ts
-models/C4LLMEndpointConfigurationRead.ts
-models/C4LLMEndpointConfigurationUpdate.ts
 models/Configuration1.ts
 models/Configuration2.ts
 models/DashboardData.ts

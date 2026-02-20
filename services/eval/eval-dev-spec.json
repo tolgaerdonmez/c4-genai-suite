@@ -2571,169 +2571,6 @@
         ],
         "title": "Body_upload_v1_qa_catalog_upload_post"
       },
-      "C4LLMEndpointConfigurationCreate": {
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "C4",
-            "title": "Type"
-          },
-          "parallelQueries": {
-            "type": "integer",
-            "title": "Parallelqueries"
-          },
-          "maxRetries": {
-            "type": "integer",
-            "title": "Maxretries"
-          },
-          "endpoint": {
-            "type": "string",
-            "title": "Endpoint"
-          },
-          "configurationId": {
-            "type": "integer",
-            "title": "Configurationid"
-          },
-          "apiKey": {
-            "type": "string",
-            "title": "Apikey"
-          },
-          "requestTimeout": {
-            "type": "integer",
-            "title": "Requesttimeout"
-          }
-        },
-        "type": "object",
-        "required": [
-          "type",
-          "parallelQueries",
-          "maxRetries",
-          "endpoint",
-          "configurationId",
-          "apiKey",
-          "requestTimeout"
-        ],
-        "title": "C4LLMEndpointConfigurationCreate"
-      },
-      "C4LLMEndpointConfigurationRead": {
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "C4",
-            "title": "Type"
-          },
-          "parallelQueries": {
-            "type": "integer",
-            "title": "Parallelqueries"
-          },
-          "maxRetries": {
-            "type": "integer",
-            "title": "Maxretries"
-          },
-          "endpoint": {
-            "type": "string",
-            "title": "Endpoint"
-          },
-          "configurationId": {
-            "type": "integer",
-            "title": "Configurationid"
-          },
-          "requestTimeout": {
-            "type": "integer",
-            "title": "Requesttimeout"
-          }
-        },
-        "type": "object",
-        "required": [
-          "type",
-          "parallelQueries",
-          "maxRetries",
-          "endpoint",
-          "configurationId",
-          "requestTimeout"
-        ],
-        "title": "C4LLMEndpointConfigurationRead"
-      },
-      "C4LLMEndpointConfigurationUpdate": {
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "C4",
-            "title": "Type"
-          },
-          "parallelQueries": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Parallelqueries"
-          },
-          "maxRetries": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Maxretries"
-          },
-          "endpoint": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Endpoint"
-          },
-          "apiKey": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Apikey"
-          },
-          "configurationId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Configurationid"
-          },
-          "requestTimeout": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Requesttimeout"
-          }
-        },
-        "type": "object",
-        "required": [
-          "type"
-        ],
-        "title": "C4LLMEndpointConfigurationUpdate"
-      },
       "DashboardData": {
         "properties": {
           "lastEvaluation": {
@@ -3977,9 +3814,6 @@
       "LLMEndpointConfigurationCreate": {
         "anyOf": [
           {
-            "$ref": "#/components/schemas/C4LLMEndpointConfigurationCreate"
-          },
-          {
             "$ref": "#/components/schemas/AzureOpenAILLMEndpointConfigurationCreate"
           },
           {
@@ -3990,9 +3824,6 @@
       "LLMEndpointConfigurationRead": {
         "anyOf": [
           {
-            "$ref": "#/components/schemas/C4LLMEndpointConfigurationRead"
-          },
-          {
             "$ref": "#/components/schemas/AzureOpenAILLMEndpointConfigurationRead"
           },
           {
@@ -4002,9 +3833,6 @@
       },
       "LLMEndpointConfigurationUpdate": {
         "anyOf": [
-          {
-            "$ref": "#/components/schemas/C4LLMEndpointConfigurationUpdate"
-          },
           {
             "$ref": "#/components/schemas/AzureOpenAILLMEndpointConfigurationUpdate"
           },
@@ -5205,26 +5033,8 @@
             "title": "Testcasesperqapair",
             "default": 3
           },
-          "llmEndpointId": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Llmendpointid"
-          },
           "c4AssistantId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "integer",
             "title": "C4Assistantid"
           },
           "c4AssistantName": {
@@ -5243,7 +5053,8 @@
         "required": [
           "name",
           "catalogId",
-          "metrics"
+          "metrics",
+          "c4AssistantId"
         ],
         "title": "RunEvaluationByQaCatalog"
       },

@@ -167,10 +167,6 @@ class Evaluation(Base, CreatedTrait, UpdatedTrait, DeletedTrait):
     test_cases: Mapped[List["TestCase"]] = relationship(
         back_populates="evaluation", cascade="all, delete-orphan"
     )
-    llm_endpoint_id: Mapped[str | None] = mapped_column(
-        ForeignKey("llm_endpoint.id"), nullable=True
-    )
-    llm_endpoint: Mapped["LLMEndpoint"] = relationship()
 
     # User context for callbacks (stored when evaluation is created)
     callback_user_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
