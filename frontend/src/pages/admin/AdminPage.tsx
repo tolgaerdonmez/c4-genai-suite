@@ -6,7 +6,6 @@ import { useTheme } from 'src/hooks';
 import { texts } from 'src/texts';
 import { useStateOfSelectedChatId } from '../chat/state/chat';
 import { DashboardPage } from './dashboard/DashboardPage';
-import { CreateEvaluationPage } from './evals/evaluations/CreateEvaluationPage';
 import { EvaluationDetailPage } from './evals/evaluations/EvaluationDetailPage';
 import { EvaluationsPage } from './evals/evaluations/EvaluationsPage';
 import { LlmEndpointsPage } from './evals/llm-endpoints/LlmEndpointsPage';
@@ -126,7 +125,6 @@ export function AdminPage() {
             <Route path="/assistants/*" element={<ConfigurationPage />} />
 
             <Route path="/evals/evaluations" element={<EvaluationsPage />} />
-            <Route path="/evals/evaluations/new" element={<CreateEvaluationPage />} />
             <Route path="/evals/evaluations/:id" element={<EvaluationDetailPage />} />
 
             <Route path="/evals/qa-catalogs" element={<QaCatalogsPage />} />
